@@ -11,6 +11,15 @@ const ReqParametersMissing = 1001
 const ReqUnauthorized = 1401
 const ReqForbidden = 1403
 const ReqTimeout = 1408
+var lang string
+
+func init() {
+	lang = "cn"
+}
+
+func GetStatusMsg(code int) string {
+	return statusMsg[lang][code]
+}
 
 var statusMsg = map[string]map[int]string{
 	"cn" : {
@@ -27,8 +36,4 @@ var statusMsg = map[string]map[int]string{
 		ReqForbidden: "Request Forbidden",
 		ReqTimeout: "Request Timeout",
 	},
-}
-
-func GetStatusMsg(code int, lang string) string {
-	return statusMsg[lang][code]
 }
