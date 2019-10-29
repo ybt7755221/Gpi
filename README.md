@@ -34,7 +34,7 @@ Gin
 ## Install
 注意在环境变量里加入GPIACTIVE(fat-测试, pro-正式)
 ## Milestone
-* milestone 1
-  - 由GOROOT模式改为module模式，并针对1.13进行优化处理
+* milestone1 (2019-10-26)
+  - 由GOROOT模式改为module模式，并针对1.13进行优化处理 
 
 
