@@ -11,11 +11,10 @@ import (
 
 func main() {
 	routers := router.InitRouter()
-	sysconf := config.Config{}
-	sysconf.LoadYamlConfig("sys")
-	duration, _ := sysconf.GetInt64("duration")
+	duration := config.Conf.GetInt64("sys.duration")
+	port := config.Conf.GetString("sys.port")
 	serv := &http.Server{
-		Addr: sysconf.GetString("port"),
+		Addr: ":"+port,
 		Handler:routers,
 		ReadTimeout: time.Duration(duration)*time.Second,
 		WriteTimeout: 2*time.Duration(duration)*time.Second,
@@ -24,6 +23,6 @@ func main() {
 	if err := serv.ListenAndServe(); err != nil {
 		log.Println(err.Error())
 	}else {
-		fmt.Println("The Server Listen Port is 9090")
+		fmt.Println("The Server Listen Port is " + port)
 	}
 }

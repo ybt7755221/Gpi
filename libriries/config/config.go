@@ -4,56 +4,45 @@ import (
 	"fmt"
 	"github.com/spf13/viper"
 	"os"
-	"strconv"
-	"time"
+	"sync"
 )
 
-type Config struct {
-	v *viper.Viper
-	ConfMap map[string]string
+var Conf *viper.Viper
+var once sync.Once
+
+func init() {
+	err := loadYamlFile()
+	if err != nil {
+		panic(err)
+	}
 }
 
-func (c *Config) LoadYamlConfig(section string) error {
+func loadYamlFile() error {
+	var err error
 	//判断测试还是正式
-	var fileName string
-	ENV := os.Getenv("GPIACTIVE")
-	if (ENV == "pro") {
-		fileName = "config"
-	}else{
-		fileName = "config_fat"
-	}
-	c.v = viper.New()
-	c.v.SetConfigName(fileName)
-	c.v.AddConfigPath("config/")
-	c.v.SetConfigType("yaml")
-	if err := c.v.ReadInConfig(); err != nil {
-		fmt.Printf("err:%s\n",err)
-		return err
-	}
-	c.ConfMap = c.v.GetStringMapString(section)
-	fmt.Println("config: " + fileName)
-	return nil
+	once.Do(func() {
+		var fileName string
+		ENV := os.Getenv("GPIACTIVE")
+		if (ENV == "pro") {
+			fileName = "config"
+		}else{
+			fileName = "config_fat"
+		}
+		Conf = viper.New()
+		Conf.SetConfigName(fileName)
+		Conf.AddConfigPath("config/")
+		Conf.SetConfigType("yaml")
+		if err = Conf.ReadInConfig(); err != nil {
+			fmt.Printf("err:%s\n",err)
+		}
+	})
+	return err
 }
 
-func (c *Config) GetString(field string) string {
-	return c.ConfMap[field]
+func GetSectionMap(section string) map[string]interface{}{
+	return Conf.GetStringMap(section)
 }
 
-func (c *Config) GetInt(field string) (int, error) {
-	res := c.GetString(field)
-	fieldInt, err := strconv.Atoi(res)
-	return fieldInt, err
+func GetSectionMapString(section string) map[string]string{
+	return Conf.GetStringMapString(section)
 }
-
-func (c *Config) GetInt64(field string) (int64, error) {
-	res := c.GetString(field)
-	fieldInt64, err := strconv.ParseInt(res, 10, 64)
-	return fieldInt64, err
-}
-
-func (c *Config) GetTimeDuration(field string) (time.Duration, error) {
-	fieldInt64, err := c.GetInt64(field)
-	duration := time.Duration(fieldInt64)
-	return duration, err
-}
-

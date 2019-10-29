@@ -20,7 +20,7 @@ type Elog struct {
 func ErrMail(c *gin.Context, errMsg string) {
 	var mailToArr []string
 	configErr := config.Config{}
-	configErr.LoadYamlConfig("errReport")
+	configErr.GetMapString("errReport")
 	json.Unmarshal([]byte(configErr.GetString("mailto")), &mailToArr)
 	msgStr := fmt.Sprintf("请求url: %s \n", c.Request.RequestURI)
 	msgStr += fmt.Sprintf("请求IP: %s \n", c.ClientIP())

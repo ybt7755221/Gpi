@@ -5,6 +5,7 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/go-xorm/xorm"
 	"gpi/libriries/config"
+	"strconv"
 	"sync"
 )
 
@@ -20,20 +21,23 @@ func init() {
 func connect() {
 	once.Do(func() {
 		var err error
-		conf := config.Config{}
-		err = conf.LoadYamlConfig("database")
+		conf := config.GetSectionMapString("database")
 		if err != nil {
 			fmt.Println("connect db Error: ", err.Error())
 		}
 		addrStr := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s",
-			conf.GetString("user"),
-			conf.GetString("passwd"),
-			conf.GetString("host"),
-			conf.GetString("port"),
-			conf.GetString("name"),
-			conf.GetString("charset"),
+			conf["user"],
+			conf["passwd"],
+			conf["host"],
+			conf["port"],
+			conf["name"],
+			conf["charset"],
 		)
-		Engine, err = xorm.NewEngine(conf.GetString("driver"), addrStr)
+		Engine, err = xorm.NewEngine(conf["driver"], addrStr)
+		openMaxInt, _ := strconv.Atoi(conf["openMax"])
+		idleMaxInt, _ := strconv.Atoi(conf["idleMax"])
+		Engine.SetMaxOpenConns(openMaxInt)
+		Engine.SetMaxIdleConns(idleMaxInt)
 		if err != nil {
 			fmt.Println("Connect DB Error :", err.Error())
 		} else {

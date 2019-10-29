@@ -15,10 +15,9 @@ func init()  {
 
 func connect() {
 	Once.Do(func() {
-		conf := config.Config{}
-		conf.LoadYamlConfig("redis")
+		conf := config.GetSectionMapString("redis")
 		Cli = redis.NewClient(&redis.Options{
-			Addr:     conf.GetString("host") + ":" + conf.GetString("port"),
+			Addr:     conf["host"] + ":" + conf["port"],
 			Password: "", // no password set
 			DB:       0,  // use default DB
 		})

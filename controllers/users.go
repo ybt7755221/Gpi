@@ -3,12 +3,9 @@ package controllers
 import (
 	"github.com/gin-gonic/gin"
 	et "gpi/entities"
-	"gpi/libriries/redis"
 	"gpi/libriries/verify"
-	"gpi/libriries/wmail"
 	"gpi/models"
 	"strconv"
-	"time"
 )
 //@TagName 用户模块
 //@Description 用户相关接口
@@ -25,26 +22,10 @@ type Users struct {
 // @router /createToken [post]
 func (u *Users) Token(c *gin.Context) {
 	rawStr, tokenStr := verify.GenerateToken(c)
+	panic("errr")
 	resSuccess(c, gin.H{
 		"raw" : rawStr,
 		"token" : tokenStr,
-	})
-}
-
-func (u *Users) Email(c *gin.Context) {
-	err := wmail.SendMail([]string{"ybt7755221@sohu.com"}, "测试邮件", "测试呢绒")
-	if err != nil {
-		resError(c, 1010, err.Error())
-	}else{
-		resSuccess(c, gin.H{})
-	}
-}
-
-func (u *Users) Redis(c *gin.Context) {
-	redis.Cli.Set("burtyu", "30", 30*time.Second)
-	res, _ := redis.Cli.Get("burtyu").Result()
-	resSuccess(c, gin.H{
-		"age" : res,
 	})
 }
 

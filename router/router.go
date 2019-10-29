@@ -10,6 +10,7 @@ import (
 func InitRouter() *gin.Engine {
 	cts := Contents{}
 	users := Users{}
+	demo := Demo{}
 	router := gin.Default()
 	router.Use(exception.Recover())
 	idx :=router.Group("/")
@@ -18,8 +19,9 @@ func InitRouter() *gin.Engine {
 			c.String(200, "Gpi系统首页")
 		})
 		idx.Any("/createToken", users.Token)
-		idx.GET("/redis", users.Redis)
-		idx.GET("/email", users.Email)
+		idx.GET("/redis", demo.Redis)
+		idx.GET("/email", demo.Email)
+		idx.GET("/conf", demo.GetConf)
 	}
 	ctR := router.Group("/content", authentication.Verify)
 	{

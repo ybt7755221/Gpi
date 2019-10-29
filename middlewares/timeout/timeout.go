@@ -11,7 +11,7 @@ import (
 func Done() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		conf := config.Config{}
-		conf.LoadYamlConfig("sys")
+		conf.GetMapString("sys")
 		duration, _ := conf.GetTimeDuration("duration")
 		ctx, cancel := context.WithTimeout(c.Request.Context(), duration*time.Second)
 		defer func() {
@@ -29,7 +29,7 @@ func Done() gin.HandlerFunc {
 func TimeHandler() func(c *gin.Context) {
 	return func(c *gin.Context) {
 		conf := config.Config{}
-		conf.LoadYamlConfig("sys")
+		conf.GetMapString("sys")
 		duration, _ := conf.GetTimeDuration("duration")
 		ctx := c.Request.Context()
 

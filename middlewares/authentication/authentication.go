@@ -3,12 +3,13 @@ package authentication
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"gpi/entities"
+	et "gpi/entities"
 	"gpi/libriries/verify"
 )
 //数据验证-中间件
 func Verify(c *gin.Context) {
 	var token string
+	var ts string
 	methodStr := c.Request.Method
 	if skip := skipVerify(c, methodStr); skip == false {
 		if methodStr == "GET" || methodStr == "DELETE"{
@@ -19,16 +20,16 @@ func Verify(c *gin.Context) {
 			ts = c.PostForm("ts")
 		}
 		if len(ts) < 1 {
-			c.JSON(http.StatusOK, entities.ApiResonse{http.StatusNoContent, "缺少token值", gin.H{}})
+			c.JSON(http.StatusOK, et.ApiResonse{et.ReqParametersMissing, "缺少token值", gin.H{}})
 			c.Abort()
 		}
 		if len(token) < 1 {
-			c.JSON(http.StatusOK, entities.ApiResonse{http.StatusNoContent, "缺少token值", gin.H{}})
+			c.JSON(http.StatusOK, et.ApiResonse{et.ReqParametersMissing, "缺少token值", gin.H{}})
 			c.Abort()
 		} else {
 			_, tokenStr := verify.GenerateToken(c)
 			if token != tokenStr {
-				c.JSON(http.StatusOK, entities.ApiResonse{http.StatusForbidden, "验证码token不一致", gin.H{}})
+				c.JSON(http.StatusOK, et.ApiResonse{et.ReqForbidden, et.GetStatusMsg(et.ReqForbidden), gin.H{}})
 				c.Abort()
 			} else {
 				c.Next()

@@ -11,19 +11,14 @@ import (
 
 func GenerateToken(c *gin.Context) (string, string) {
 	var rawStr string
-	conf := config.Config{}
-	err := conf.LoadYamlConfig("auth")
-	if err != nil {
-		fmt.Println("GenerateToken Err: ", err.Error())
-	}
+	conf := config.GetSectionMapString("auth")
 	methodStr := c.Request.Method
 	if methodStr == "GET" {
 		rawStr = getParams(c.Request.URL.Query())
 	}else{
 		rawStr = getParams(c.Request.PostForm)
 	}
-	rawStr = fmt.Sprintf("%s_%s_%s", conf.GetString("app_id"), rawStr, conf.GetString("secret"))
-	fmt.Println("rawStr -- ", rawStr)
+	rawStr = fmt.Sprintf("%s&%s&%s", conf["app_id"], rawStr, conf["secret"])
 	return rawStr, GenerateMD5(rawStr, 32)
 }
 
@@ -32,11 +27,14 @@ func getParams(data url.Values) string {
 	delete(data, "app_id")
 	delete(data, "token")
 	if(len(data) > 0) {
+		keys := make([]string,0)
+		for key, _ := range data {
+			keys = append(keys, key)
+		}
 		var paramsStr string
-		for key, val := range data {
-			if key != "token" && key != "app_id" {
-				fmt.Println("key - val :", key, val)
-				paramsStr += key + "-" + val[0] + "-"
+		for _, val := range keys {
+			if val != "token" && val != "app_id" {
+				paramsStr += val + "&" + data.Get(val) + "&"
 			}
 		}
 		return paramsStr[0 : len(paramsStr)-1]

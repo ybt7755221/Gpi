@@ -9,18 +9,23 @@ database :
   user : GinUser
   passwd : userGin
   charset: utf8
+  openMax: 100
+  idleMax: 50
 redis :
   host : 127.0.0.1
   port : 6379
 email :
   host : smtp.163.com
   port : 25
-  user : your_email
-  passwd: your_password
+  user : burt_yu@163.com
+  passwd: Burtyu1989
 errReport :
-  mailto : "[burt_yu@sohu.com]"
+  subject : [Gpi]系统错误
+  mailto :
+    - ybt7755221@sohu.com
+    - 523078374@qq.com
 sys :
-  port : ":9090"
+  port : 9090
   duration : 2
   limit_start: false
   limit_num: 100
