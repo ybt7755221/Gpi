@@ -21,8 +21,18 @@ type Users struct {
 // @Failure 500 system err
 // @router /createToken [post]
 func (u *Users) Token(c *gin.Context) {
+	var ts string
+	methodStr := c.Request.Method
+	if methodStr == "GET" || methodStr == "DELETE"{
+		ts = c.Query("ts")
+	} else {
+		ts = c.PostForm("ts")
+	}
+	if ts == "" {
+		resError(c, et.EntityParametersMissing, et.GetStatusMsg(et.EntityParametersMissing))
+		return
+	}
 	rawStr, tokenStr := verify.GenerateToken(c)
-	panic("errr")
 	resSuccess(c, gin.H{
 		"raw" : rawStr,
 		"token" : tokenStr,

@@ -50,7 +50,7 @@ func resResult(c *gin.Context, code int, msg string, data interface{}) {
 }
 
 func resSuccess(c *gin.Context, data interface{}) {
-	dateStruct := ApiResonse{ReqIsOk, GetStatusMsg(ReqIsOk), data}
+	dateStruct := ApiResonse{EntityIsOk, GetStatusMsg(EntityIsOk), data}
 	resJson(c, http.StatusOK, dateStruct)
 }
 

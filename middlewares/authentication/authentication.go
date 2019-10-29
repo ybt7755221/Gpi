@@ -20,16 +20,16 @@ func Verify(c *gin.Context) {
 			ts = c.PostForm("ts")
 		}
 		if len(ts) < 1 {
-			c.JSON(http.StatusOK, et.ApiResonse{et.ReqParametersMissing, "缺少token值", gin.H{}})
+			c.JSON(http.StatusOK, et.ApiResonse{et.EntityParametersMissing, "缺少ts值", gin.H{}})
 			c.Abort()
 		}
 		if len(token) < 1 {
-			c.JSON(http.StatusOK, et.ApiResonse{et.ReqParametersMissing, "缺少token值", gin.H{}})
+			c.JSON(http.StatusOK, et.ApiResonse{et.EntityParametersMissing, "缺少token值", gin.H{}})
 			c.Abort()
 		} else {
 			_, tokenStr := verify.GenerateToken(c)
 			if token != tokenStr {
-				c.JSON(http.StatusOK, et.ApiResonse{et.ReqForbidden, et.GetStatusMsg(et.ReqForbidden), gin.H{}})
+				c.JSON(http.StatusOK, et.ApiResonse{et.EntityForbidden, et.GetStatusMsg(et.EntityForbidden), gin.H{}})
 				c.Abort()
 			} else {
 				c.Next()

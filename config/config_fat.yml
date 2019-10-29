@@ -18,9 +18,9 @@ email :
   host : smtp.163.com
   port : 25
   user : burt_yu@163.com
-  passwd: Burtyu1989
+  passwd : Burtyu1989
 errReport :
-  subject : [Gpi]系统错误
+  subject : 【Gpi】系统错误
   mailto :
     - ybt7755221@sohu.com
     - 523078374@qq.com

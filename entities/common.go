@@ -1,23 +1,29 @@
 package entities
 
+import "sync"
+
 type ApiResonse struct {
 	Code 	int			`json:"code"`
 	Msg		string		`json:"msg"`
 	Data 	interface{}	`json:"data"`
 }
 
-const ReqIsOk = 1000
-const ReqParametersMissing = 1001
-const TokenMissing = 1002
-const ReqUnauthorized = 1401
-const ReqForbidden = 1403
-const ReqTimeout = 1408
-const ReqFailure = 1100
+const EntityIsOk = 1000
+const EntityParametersMissing = 1001
+const EntityTokenMissing = 1002
+const EntityUnauthorized = 1401
+const EntityForbidden = 1403
+const EntityTimeout = 1408
+const EntitySystemError = 1504
+const EntityFailure = 1100
 
 var lang string
+var once sync.Once
 
 func init() {
-	lang = "cn"
+	once.Do(func() {
+		lang = "cn"
+	})
 }
 
 func GetStatusMsg(code int) string {
@@ -26,21 +32,23 @@ func GetStatusMsg(code int) string {
 
 var statusMsg = map[string]map[int]string{
 	"cn" : {
-		ReqIsOk: "请求成功",
-		ReqParametersMissing: "缺少请求参数",
-		ReqUnauthorized: "签名验证失败",
-		ReqForbidden: "请求被禁止",
-		ReqTimeout: "请求超时",
-		TokenMissing: "缺少token值",
-		ReqFailure: "请求失败",
+		EntityIsOk: "请求成功",
+		EntityParametersMissing: "缺少请求参数",
+		EntityUnauthorized: "签名验证失败",
+		EntityForbidden: "请求被禁止",
+		EntityTimeout: "请求超时",
+		EntityTokenMissing: "缺少token值",
+		EntityFailure: "请求失败",
+		EntitySystemError: "系统错误",
 	},
 	"en" : {
-		ReqIsOk: "Request Success",
-		ReqParametersMissing: "The Some Parameters is Missing",
-		ReqUnauthorized: "Request Unauthorized",
-		ReqForbidden: "Request Forbidden",
-		ReqTimeout: "Request Timeout",
-		TokenMissing: "The token is missing",
-		ReqFailure: "Request Failure",
+		EntityIsOk: "Request Success",
+		EntityParametersMissing: "The Some Parameters is Missing",
+		EntityUnauthorized: "Request Unauthorized",
+		EntityForbidden: "Request Forbidden",
+		EntityTimeout: "Request Timeout",
+		EntityTokenMissing: "The token is missing",
+		EntityFailure: "Request Failure",
+		EntitySystemError: "System Error",
 	},
 }

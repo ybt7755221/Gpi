@@ -18,7 +18,7 @@ func (d *Demo) GetConf(c *gin.Context) {
 func (d *Demo) Email(c *gin.Context) {
 	err := wmail.SendMail([]string{"ybt7755221@sohu.com"}, "测试邮件", "测试呢绒")
 	if err != nil {
-		resError(c, et.ReqFailure, err.Error())
+		resError(c, et.EntityFailure, err.Error())
 	}else{
 		resSuccess(c, gin.H{})
 	}
