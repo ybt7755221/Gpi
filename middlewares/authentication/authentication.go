@@ -13,8 +13,14 @@ func Verify(c *gin.Context) {
 	if skip := skipVerify(c, methodStr); skip == false {
 		if methodStr == "GET" || methodStr == "DELETE"{
 			token = c.Query("token")
+			ts = c.Query("ts")
 		} else {
 			token = c.PostForm("token")
+			ts = c.PostForm("ts")
+		}
+		if len(ts) < 1 {
+			c.JSON(http.StatusOK, entities.ApiResonse{http.StatusNoContent, "缺少token值", gin.H{}})
+			c.Abort()
 		}
 		if len(token) < 1 {
 			c.JSON(http.StatusOK, entities.ApiResonse{http.StatusNoContent, "缺少token值", gin.H{}})

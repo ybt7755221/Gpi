@@ -3,7 +3,7 @@ package controllers
 import (
 	"github.com/gin-gonic/gin"
 	"strconv"
-	"gpi/entities"
+	et "gpi/entities"
 	"gpi/models"
 )
 //@TagName 用户模块
@@ -74,8 +74,8 @@ func (u *Contents) Delete(c *gin.Context) {
 /**
  * 获取user post参数
  */
-func getContentBody(c *gin.Context) *entities.GinContents {
-	connStruct := new(entities.GinContents)
+func getContentBody(c *gin.Context) *et.GinContents {
+	connStruct := new(et.GinContents)
 	connStruct.Topic 	  	= c.PostForm("topic")
 	connStruct.Content    	= c.PostForm("content")
 	connStruct.Category, _	= strconv.Atoi(c.PostForm("category"))

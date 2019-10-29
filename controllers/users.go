@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"github.com/gin-gonic/gin"
-	"gpi/entities"
+	et "gpi/entities"
 	"gpi/libriries/redis"
 	"gpi/libriries/verify"
 	"gpi/libriries/wmail"
@@ -141,8 +141,8 @@ func (u *Users) Update(c *gin.Context) {
 /**
  * 获取user post参数
  */
-func getUserBody(c *gin.Context) *entities.GinUsers {
-	userStruct := new(entities.GinUsers)
+func getUserBody(c *gin.Context) *et.GinUsers {
+	userStruct := new(et.GinUsers)
 	userStruct.Username = c.PostForm("username")
 	userStruct.Password = c.PostForm("password")
 	userStruct.Fullname = c.PostForm("fullname")

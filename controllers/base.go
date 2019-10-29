@@ -7,7 +7,7 @@ import (
 	"time"
 	. "gpi/entities"
 )
-
+const lang = "cn"
 var pageSize = 20
 
 func getParams(c *gin.Context, fields []string) map[string]string {
@@ -45,8 +45,13 @@ func resJson(c *gin.Context, httpCode int, data ApiResonse) {
 	c.JSON(httpCode, data)
 }
 
+func resResult(c *gin.Context, code int, msg string, data interface{}) {
+	dataStruct := ApiResonse{code, msg, data}
+	resJson(c, http.StatusOK, dataStruct)
+}
+
 func resSuccess(c *gin.Context, data interface{}) {
-	dateStruct := ApiResonse{http.StatusOK, "操作成功", data}
+	dateStruct := ApiResonse{ReqIsOk, GetStatusMsg(ReqIsOk, lang), data}
 	resJson(c, http.StatusOK, dateStruct)
 }
 
