@@ -1,0 +1,27 @@
+auth :
+  app_id : WP@Y1!c#6h
+  secret : Dl*sCKW7C{SfYiPtYX*O5/71vG9&sm?2U
+database :
+  driver : mysql
+  host : 127.0.0.1
+  port : 3306
+  name : gin
+  user : GinUser
+  passwd : userGin
+  charset: utf8
+redis :
+  host : 127.0.0.1
+  port : 6379
+email :
+  host : smtp.163.com
+  port : 25
+  user : your_email
+  passwd: your_password
+errReport :
+  mailto : "[burt_yu@sohu.com]"
+sys :
+  port : ":9090"
+  duration : 2
+  limit_start: false
+  limit_num: 100
+  
