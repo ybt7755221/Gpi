@@ -1,12 +1,11 @@
 package elog
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"time"
 	"gpi/libriries/config"
 	"gpi/libriries/wmail"
+	"time"
 )
 
 type Elog struct {
@@ -18,14 +17,17 @@ type Elog struct {
 }
 
 func ErrMail(c *gin.Context, errMsg string) {
-	var mailToArr []string
-	configErr := config.Config{}
-	configErr.GetMapString("errReport")
-	json.Unmarshal([]byte(configErr.GetString("mailto")), &mailToArr)
-	msgStr := fmt.Sprintf("请求url: %s \n", c.Request.RequestURI)
-	msgStr += fmt.Sprintf("请求IP: %s \n", c.ClientIP())
-	msgStr += fmt.Sprintf("请求Header: %s \n", c.Request.Header)
-	msgStr += fmt.Sprintf("请求时间: %s \n", time.Now().Format("2006-01-02 15:04:05"))
-	msgStr += fmt.Sprintf("错误信息: %s \n", errMsg)
-	wmail.SendMail(mailToArr, "系统错误", msgStr)
+	var msgStr string
+	mailToArr := config.Conf.GetStringSlice("errReport.mailto")
+	subject := config.Conf.GetString("errReport.subject")
+	if c == nil{
+		msgStr = errMsg
+	} else {
+		msgStr += fmt.Sprintf("请求url: %s <br />", c.Request.RequestURI)
+		msgStr += fmt.Sprintf("请求IP: %s <br />", c.ClientIP())
+		msgStr += fmt.Sprintf("请求Header: %s <br />", c.Request.Header)
+		msgStr += fmt.Sprintf("请求时间: %s <br />", time.Now().Format("2006-01-02 15:04:05"))
+		msgStr += fmt.Sprintf("错误信息: %s <br />", errMsg)
+	}
+	wmail.SendMail(mailToArr, subject, msgStr)
 }

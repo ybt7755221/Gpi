@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	"gpi/libriries/config"
+	"gpi/libriries/elog"
 	"gpi/router"
-	"log"
 	"net/http"
 	"time"
 )
@@ -21,7 +21,7 @@ func main() {
 		MaxHeaderBytes: 1 << 20,
 	}
 	if err := serv.ListenAndServe(); err != nil {
-		log.Println(err.Error())
+		elog.ErrMail(nil, err.Error())
 	}else {
 		fmt.Println("The Server Listen Port is " + port)
 	}
