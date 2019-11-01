@@ -3,7 +3,6 @@ package controllers
 import (
 	"github.com/gin-gonic/gin"
 	et "gpi/entities"
-	"gpi/libriries/verify"
 	"gpi/models"
 	"strconv"
 )
@@ -11,32 +10,6 @@ import (
 //@Description 用户相关接口
 type Users struct {
 	model *models.Users
-}
-// @Title GetToken
-// @Summary 获取token接口
-// @Description 获取token接口
-// @Param	app_id 	query  	string  true  "验证id"
-// @Param	token	query  	string  true  "验证参数"
-// @Success 200 {object} ApiResonse
-// @Failure 500 system err
-// @router /createToken [post]
-func (u *Users) Token(c *gin.Context) {
-	var ts string
-	methodStr := c.Request.Method
-	if methodStr == "GET" || methodStr == "DELETE"{
-		ts = c.Query("ts")
-	} else {
-		ts = c.PostForm("ts")
-	}
-	if ts == "" {
-		resError(c, et.EntityParametersMissing, et.GetStatusMsg(et.EntityParametersMissing))
-		return
-	}
-	rawStr, tokenStr := verify.GenerateToken(c)
-	resSuccess(c, gin.H{
-		"raw" : rawStr,
-		"token" : tokenStr,
-	})
 }
 
 // @Title Get
@@ -97,7 +70,7 @@ func (u *Users) Create(c *gin.Context) {
 	userStruct := getUserBody(c)
 	err := u.model.Insert(userStruct)
 	if err != nil {
-		resError(c, 1001, err.Error())
+		resError(c, et.EntitySystemError, err.Error())
 		return
 	}
 	resSuccess(c, userStruct)
@@ -118,12 +91,12 @@ func (u *Users) Create(c *gin.Context) {
 func (u *Users) Update(c *gin.Context) {
 	userStruct := getUserBody(c)
 	if c.Param("id") != c.PostForm("id") {
-		resError(c, 1000, "Id为非法参数")
+		resError(c, et.EntityForbidden, "Id为非法参数")
 	}
 	idInt, _ := strconv.Atoi(c.PostForm("id"))
 	_, err := u.model.Update(idInt, userStruct)
 	if err != nil {
-		resError(c, 1001, err.Error())
+		resError(c, et.EntitySystemError, err.Error())
 		return
 	}
 	userStruct.Id = idInt

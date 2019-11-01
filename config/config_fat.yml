@@ -29,4 +29,9 @@ sys :
   duration : 2
   limit_start: false
   limit_num: 100
+
+jaeger :
+  host : 127.0.0.1
+  port : 6831
+  type : const
   

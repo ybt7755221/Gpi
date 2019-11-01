@@ -18,7 +18,7 @@ func InitRouter() *gin.Engine {
 		idx.GET("/", func(c *gin.Context) {
 			c.String(200, "Gpi系统首页")
 		})
-		idx.Any("/createToken", users.Token)
+		idx.Any("/createToken", demo.Token)
 		idx.GET("/redis", demo.Redis)
 		idx.GET("/email", demo.Email)
 		idx.GET("/conf", demo.GetConf)

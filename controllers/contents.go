@@ -18,7 +18,7 @@ func (u *Contents) Get(c *gin.Context) {
 	params["conditions"] = getParams(c, fieldsArr)
 	users, err := u.model.GetContents(params)
 	if err != nil {
-		resError(c, 1000, err.Error())
+		resError(c, et.EntitySystemError, err.Error())
 		return
 	}
 	resSuccess(c, users)
@@ -28,7 +28,7 @@ func (u *Contents) GetId(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	user, err := u.model.GetById(id)
 	if err != nil {
-		resError(c, 1000, err.Error())
+		resError(c, et.EntitySystemError, err.Error())
 		return
 	}
 	resSuccess(c, user)
@@ -38,7 +38,7 @@ func (u *Contents) Create(c *gin.Context) {
 	connStruct := getContentBody(c)
 	err := u.model.Insert(connStruct)
 	if err != nil {
-		resError(c, 1001, err.Error())
+		resError(c, et.EntitySystemError, err.Error())
 		return
 	}
 	resSuccess(c, connStruct)
@@ -47,12 +47,12 @@ func (u *Contents) Create(c *gin.Context) {
 func (u *Contents) Update(c *gin.Context) {
 	connStruct := getContentBody(c)
 	if c.Param("id") != c.PostForm("id") {
-		resError(c, 1000, "Id为非法参数")
+		resError(c, et.EntityForbidden, "Id为非法参数")
 	}
 	idInt, _ := strconv.Atoi(c.PostForm("id"))
 	_, err := u.model.Update(idInt, connStruct)
 	if err != nil {
-		resError(c, 1001, err.Error())
+		resError(c, et.EntitySystemError, err.Error())
 		return
 	}
 	connStruct.Id = idInt

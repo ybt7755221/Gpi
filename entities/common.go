@@ -11,10 +11,10 @@ type ApiResonse struct {
 const EntityIsOk = 1000
 const EntityParametersMissing = 1001
 const EntityTokenMissing = 1002
+const EntitySystemError = 1003
 const EntityUnauthorized = 1401
 const EntityForbidden = 1403
-const EntityTimeout = 1408
-const EntitySystemError = 1504
+const EntityTimeout = 1504
 const EntityFailure = 1100
 
 var lang string

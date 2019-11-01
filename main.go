@@ -17,7 +17,7 @@ func main() {
 		Addr: ":"+port,
 		Handler:routers,
 		ReadTimeout: time.Duration(duration)*time.Second,
-		WriteTimeout: 2*time.Duration(duration)*time.Second,
+		WriteTimeout: time.Duration(duration)*time.Second,
 		MaxHeaderBytes: 1 << 20,
 	}
 	if err := serv.ListenAndServe(); err != nil {

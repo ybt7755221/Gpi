@@ -3,7 +3,9 @@ package controllers
 import (
 	"github.com/gin-gonic/gin"
 	et "gpi/entities"
+	"gpi/libriries/config"
 	"gpi/libriries/redis"
+	"gpi/libriries/verify"
 	"gpi/libriries/wmail"
 	"time"
 )
@@ -11,8 +13,36 @@ import (
 type Demo struct {
 }
 
-func (d *Demo) GetConf(c *gin.Context) {
+// @Title GetToken
+// @Summary 获取token接口
+// @Description 获取token接口
+// @Param	app_id 	query  	string  true  "验证id"
+// @Param	token	query  	string  true  "验证参数"
+// @Success 200 {object} ApiResonse
+// @Failure 500 system err
+// @router /createToken [post]
+func (d *Demo) Token(c *gin.Context) {
+	var ts string
+	methodStr := c.Request.Method
+	if methodStr == "GET" || methodStr == "DELETE"{
+		ts = c.Query("ts")
+	} else {
+		ts = c.PostForm("ts")
+	}
+	if ts != "" {
+		resError(c, et.EntityParametersMissing, et.GetStatusMsg(et.EntityParametersMissing))
+		return
+	}
+	rawStr, tokenStr := verify.GenerateToken(c)
+	resSuccess(c, gin.H{
+		"raw" : rawStr,
+		"token" : tokenStr,
+	})
+}
 
+func (d *Demo) GetConf(c *gin.Context) {
+	time.Sleep(3 * time.Second)
+	resSuccess(c, config.Conf.GetStringMap(c.Query("section")))
 }
 
 func (d *Demo) Email(c *gin.Context) {
