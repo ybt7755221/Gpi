@@ -5,6 +5,7 @@ import (
 	. "gpi/controllers"
 	"gpi/middlewares/authentication"
 	"gpi/middlewares/exception"
+	"gpi/middlewares/jaegerMid"
 )
 
 func InitRouter() *gin.Engine {
@@ -12,7 +13,7 @@ func InitRouter() *gin.Engine {
 	users := Users{}
 	demo := Demo{}
 	router := gin.Default()
-	router.Use(exception.Recover())
+	router.Use(exception.Recover(), jaegerMid.Listen())
 	idx :=router.Group("/")
 	{
 		idx.GET("/", func(c *gin.Context) {
