@@ -2,21 +2,21 @@ package controllers
 
 import (
 	"github.com/gin-gonic/gin"
-	"strconv"
 	et "gpi/entities"
-	"gpi/models"
+	"gpi/service"
+	"strconv"
 )
 //@TagName 用户模块
 //@Description 用户相关接口
 type ContentsController struct {
-	model *models.ContentsModel
+	serv *service.ContentsService
 }
 
 func (u *ContentsController) Get(c *gin.Context) {
 	fieldsArr := []string{"topic", "category", "test_time", "publish_time"}
 	params := getCommonParams(c)
 	params["conditions"] = getParams(c, fieldsArr)
-	users, err := u.model.GetContents(params)
+	users, err := u.serv.Find(params)
 	if err != nil {
 		resError(c, et.EntitySystemError, err.Error())
 		return
@@ -26,7 +26,7 @@ func (u *ContentsController) Get(c *gin.Context) {
 
 func (u *ContentsController) GetId(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
-	user, err := u.model.GetById(id)
+	user, err := u.serv.FindById(id)
 	if err != nil {
 		resError(c, et.EntitySystemError, err.Error())
 		return
@@ -36,7 +36,7 @@ func (u *ContentsController) GetId(c *gin.Context) {
 
 func (u *ContentsController) Create(c *gin.Context) {
 	connStruct := getContentBody(c)
-	err := u.model.Insert(connStruct)
+	err := u.serv.Insert(connStruct)
 	if err != nil {
 		resError(c, et.EntitySystemError, err.Error())
 		return
@@ -50,7 +50,7 @@ func (u *ContentsController) Update(c *gin.Context) {
 		resError(c, et.EntityForbidden, "Id为非法参数")
 	}
 	idInt, _ := strconv.Atoi(c.PostForm("id"))
-	_, err := u.model.Update(idInt, connStruct)
+	_, err := u.serv.UpdateById(idInt, connStruct)
 	if err != nil {
 		resError(c, et.EntitySystemError, err.Error())
 		return
@@ -64,7 +64,7 @@ func (u *ContentsController) Delete(c *gin.Context) {
 		resError(c, 1000, "Id为非法参数")
 	}
 	idInt, _ := strconv.Atoi(c.Query("id"))
-	err := u.model.Delete(idInt)
+	err := u.serv.DeleteById(idInt)
 	if err != nil {
 		resError(c, 1010, err.Error())
 		return

@@ -3,14 +3,12 @@ package controllers
 import (
 	"github.com/gin-gonic/gin"
 	et "gpi/entities"
-	"gpi/models"
 	"gpi/service"
 	"strconv"
 )
 //@TagName 用户模块
 //@Description 用户相关接口
 type UsersController struct {
-	model *models.UsersModel
 	serv *service.UsersService
 }
 

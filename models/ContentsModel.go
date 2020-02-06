@@ -5,6 +5,7 @@ import (
 	"github.com/juju/errors"
 	. "gpi/entities"
 	DB "gpi/libriries/database"
+	"strings"
 	"time"
 )
 
@@ -30,13 +31,16 @@ func (u *ContentsModel) GetContents(params gin.H) ([]GinContents, error) {
 		}
 	}
 	dbC = dbC.Limit(params["limit"].(int), params["offset"].(int))
-	if params["sortField"] == "" {
-		params["sortField"] = "id"
-	}
-	if params["sort"].(int) == 1 {
-		dbC = dbC.Asc(params["sortField"].(string))
-	} else {
-		dbC = dbC.Desc(params["sortField"].(string))
+	//排序
+	sort := params["sort"].(map[string]string)
+	if len(sort) > 0 {
+		for key, val := range sort{
+			if strings.ToLower(val) == "asc" {
+				dbC = dbC.Asc(key)
+			}else{
+				dbC = dbC.Desc(key)
+			}
+		}
 	}
 	err := dbC.Find(&Contents)
 	return Contents, err
@@ -70,7 +74,7 @@ func (u *ContentsModel) Insert(conn *GinContents) (err error) {
 	return err
 }
 
-func (u *ContentsModel) Update(id int, conn *GinContents) (affected int64, err error) {
+func (u *ContentsModel) UpdateById(id int, conn *GinContents) (affected int64, err error) {
 	conn.OpTime = time.Now()
 	dbConn := DB.GetDB()
 	affected, err = dbConn.Id(id).Update(conn)
