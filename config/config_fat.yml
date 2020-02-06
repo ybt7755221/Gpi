@@ -9,8 +9,8 @@ database :
   user : GinUser
   passwd : userGin
   charset: utf8
-  openMax: 100
-  idleMax: 50
+  openMax: 120
+  idleMax: 60
 redis :
   host : 127.0.0.1
   port : 6379
@@ -26,7 +26,7 @@ errReport :
     - 523078374@qq.com
 sys :
   port : 9090
-  duration : 2
+  duration : 3
   limit_start: false
   limit_num: 100
 

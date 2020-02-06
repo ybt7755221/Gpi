@@ -17,6 +17,11 @@ func init() {
 	connect()
 }
 
+func GetDB() *xorm.Engine {
+	db, _ := Engine.Clone()
+	return db
+}
+
 //连接数据库--单例模式
 func connect() {
 	once.Do(func() {
