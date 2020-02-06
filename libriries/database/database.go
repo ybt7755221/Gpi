@@ -18,6 +18,9 @@ func init() {
 }
 
 func GetDB() *xorm.Engine {
+	if Engine == nil {
+		connect()
+	}
 	db, _ := Engine.Clone()
 	return db
 }
