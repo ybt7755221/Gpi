@@ -8,8 +8,7 @@ import (
 	"time"
 )
 
-type Contents struct {
-	Common
+type ContentsModel struct {
 }
 
 /**
@@ -17,7 +16,7 @@ type Contents struct {
  * @Param params 请求参数
  * @return {object} []GinContents, {object} error
  */
-func (u *Contents) GetContents(params gin.H) ([]GinContents, error) {
+func (u *ContentsModel) GetContents(params gin.H) ([]GinContents, error) {
 	Contents := make([]GinContents, 0)
 	dbConn := DB.GetDB()
 	dbC := dbConn.Where("1")
@@ -50,14 +49,14 @@ func (u *Contents) GetContents(params gin.H) ([]GinContents, error) {
  * @Param limit  长度
  * @return {object} GinContents, {object} error
  */
-func (u *Contents) GetById(id int) (*GinContents, error) {
+func (u *ContentsModel) GetById(id int) (*GinContents, error) {
 	user := &GinContents{Id: id}
 	dbConn := DB.GetDB()
 	_, err := dbConn.Get(user)
 	return user, err
 }
 
-func (u *Contents) Insert(conn *GinContents) (err error) {
+func (u *ContentsModel) Insert(conn *GinContents) (err error) {
 	if conn.Topic == "" {
 		err = errors.New("topic不能为空!")
 		return err
@@ -71,14 +70,14 @@ func (u *Contents) Insert(conn *GinContents) (err error) {
 	return err
 }
 
-func (u *Contents) Update(id int, conn *GinContents) (affected int64, err error) {
+func (u *ContentsModel) Update(id int, conn *GinContents) (affected int64, err error) {
 	conn.OpTime = time.Now()
 	dbConn := DB.GetDB()
 	affected, err = dbConn.Id(id).Update(conn)
 	return
 }
 
-func (u *Contents) Delete(id int) error {
+func (u *ContentsModel) Delete(id int) error {
 	conn := new(GinContents)
 	dbConn := DB.GetDB()
 	affected, err := dbConn.Id(id).Delete(conn)

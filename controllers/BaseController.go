@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
@@ -26,18 +27,24 @@ func getCommonParams(c *gin.Context) gin.H{
 	if err != nil || limit == 0 {
 		limit = pageSize
 	}
-	sortField := c.Query("sortField")
-	sort, err := strconv.Atoi(c.Query("sort"))
-	if err != nil || sort != 1 {
-		sort = 2
+	sortStr := c.Query("sort")
+	sort := make(map[string]string, 0)
+	if len(sortStr) > 0 {
+		sort = getSort(sortStr)
 	}
 	commonParams := gin.H{
 		"offset"  : offset,
 		"limit"   : limit,
-		"sortField" : sortField,
 		"sort"    : sort,
 	}
 	return commonParams
+}
+
+func getSort(sortStr string) (sort map[string]string) {
+	if err := json.Unmarshal([]byte(sortStr), &sort); err != nil {
+		return nil
+	}
+	return
 }
 
 func resJson(c *gin.Context, httpCode int, data ApiResonse) {

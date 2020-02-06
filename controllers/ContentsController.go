@@ -8,11 +8,11 @@ import (
 )
 //@TagName 用户模块
 //@Description 用户相关接口
-type Contents struct {
-	model *models.Contents
+type ContentsController struct {
+	model *models.ContentsModel
 }
 
-func (u *Contents) Get(c *gin.Context) {
+func (u *ContentsController) Get(c *gin.Context) {
 	fieldsArr := []string{"topic", "category", "test_time", "publish_time"}
 	params := getCommonParams(c)
 	params["conditions"] = getParams(c, fieldsArr)
@@ -24,7 +24,7 @@ func (u *Contents) Get(c *gin.Context) {
 	resSuccess(c, users)
 }
 
-func (u *Contents) GetId(c *gin.Context) {
+func (u *ContentsController) GetId(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	user, err := u.model.GetById(id)
 	if err != nil {
@@ -34,7 +34,7 @@ func (u *Contents) GetId(c *gin.Context) {
 	resSuccess(c, user)
 }
 
-func (u *Contents) Create(c *gin.Context) {
+func (u *ContentsController) Create(c *gin.Context) {
 	connStruct := getContentBody(c)
 	err := u.model.Insert(connStruct)
 	if err != nil {
@@ -44,7 +44,7 @@ func (u *Contents) Create(c *gin.Context) {
 	resSuccess(c, connStruct)
 }
 
-func (u *Contents) Update(c *gin.Context) {
+func (u *ContentsController) Update(c *gin.Context) {
 	connStruct := getContentBody(c)
 	if c.Param("id") != c.PostForm("id") {
 		resError(c, et.EntityForbidden, "Id为非法参数")
@@ -59,7 +59,7 @@ func (u *Contents) Update(c *gin.Context) {
 	resSuccess(c, connStruct)
 }
 
-func (u *Contents) Delete(c *gin.Context) {
+func (u *ContentsController) Delete(c *gin.Context) {
 	if c.Param("id") != c.Query("id") {
 		resError(c, 1000, "Id为非法参数")
 	}

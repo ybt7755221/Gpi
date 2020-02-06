@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-type Demo struct {
+type DemoController struct {
 }
 
 // @Title GetToken
@@ -21,7 +21,7 @@ type Demo struct {
 // @Success 200 {object} ApiResonse
 // @Failure 500 system err
 // @router /createToken [post]
-func (d *Demo) Token(c *gin.Context) {
+func (d *DemoController) Token(c *gin.Context) {
 	var ts string
 	methodStr := c.Request.Method
 	if methodStr == "GET" || methodStr == "DELETE"{
@@ -40,12 +40,12 @@ func (d *Demo) Token(c *gin.Context) {
 	})
 }
 
-func (d *Demo) GetConf(c *gin.Context) {
+func (d *DemoController) GetConf(c *gin.Context) {
 	time.Sleep(3 * time.Second)
 	resSuccess(c, config.Conf.GetStringMap(c.Query("section")))
 }
 
-func (d *Demo) Email(c *gin.Context) {
+func (d *DemoController) Email(c *gin.Context) {
 	err := wmail.SendMail([]string{"ybt7755221@sohu.com"}, "测试邮件", "测试呢绒")
 	if err != nil {
 		resError(c, et.EntityFailure, err.Error())
@@ -54,7 +54,7 @@ func (d *Demo) Email(c *gin.Context) {
 	}
 }
 
-func (d *Demo) Redis(c *gin.Context) {
+func (d *DemoController) Redis(c *gin.Context) {
 	redis.Cli.Set("burtyu", "30", 30*time.Second)
 	res, _ := redis.Cli.Get("burtyu").Result()
 	resSuccess(c, gin.H{

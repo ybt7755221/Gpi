@@ -6,11 +6,11 @@ import (
 	. "gpi/entities"
 	DB "gpi/libriries/database"
 	"gpi/libriries/verify"
+	"strings"
 	"time"
 )
 
-type Users struct {
-	Common
+type UsersModel struct {
 }
 
 /**
@@ -18,7 +18,7 @@ type Users struct {
  * @Param params 请求参数
  * @return {object} []GinUsers, {object} error
  */
-func (u *Users) GetUser(params gin.H) ([]GinUsers, error) {
+func (u *UsersModel) GetUser(params gin.H) ([]GinUsers, error) {
 	dbConn := DB.GetDB()
 	defer dbConn.Close()
 	users := make([]GinUsers, 0)
@@ -33,13 +33,16 @@ func (u *Users) GetUser(params gin.H) ([]GinUsers, error) {
 		}
 	}
 	dbC = dbC.Limit(params["limit"].(int), params["offset"].(int))
-	if params["sortField"] == "" {
-		params["sortField"] = "id"
-	}
-	if params["sort"].(int) == 1 {
-		dbC = dbC.Asc(params["sortField"].(string))
-	} else {
-		dbC = dbC.Desc(params["sortField"].(string))
+	//排序
+	sort := params["sort"].(map[string]string)
+	if len(sort) > 0 {
+		for key, val := range sort{
+			if strings.ToLower(val) == "asc" {
+				dbC = dbC.Asc(key)
+			}else{
+				dbC = dbC.Desc(key)
+			}
+		}
 	}
 	err := dbC.Find(&users)
 	return users, err
@@ -52,7 +55,7 @@ func (u *Users) GetUser(params gin.H) ([]GinUsers, error) {
  * @Param limit  长度
  * @return {object} GinUsers, {object} error
  */
-func (u *Users) GetById(id int) (*GinUsers, error) {
+func (u *UsersModel) GetById(id int) (*GinUsers, error) {
 	user := &GinUsers{Id: id}
 	dbConn := DB.GetDB()
 	_, err := dbConn.Get(user)
@@ -60,7 +63,7 @@ func (u *Users) GetById(id int) (*GinUsers, error) {
 	return user, err
 }
 
-func (u *Users) Insert(user *GinUsers) (err error) {
+func (u *UsersModel) Insert(user *GinUsers) (err error) {
 	if user.Username == "" || user.Password == "" || user.Mobile == "" {
 		err = errors.New("username, passowrd, mobile不能为空!")
 		return err
@@ -84,7 +87,7 @@ func (u *Users) Insert(user *GinUsers) (err error) {
 	return err
 }
 
-func (u *Users) Update(id int, user *GinUsers) (affected int64, err error) {
+func (u *UsersModel) UpdateById(id int, user *GinUsers) (affected int64, err error) {
 	if user.Password != "" {
 		user.Password = verify.GenerateMD5(user.Password, 32)
 	}

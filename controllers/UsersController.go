@@ -4,12 +4,14 @@ import (
 	"github.com/gin-gonic/gin"
 	et "gpi/entities"
 	"gpi/models"
+	"gpi/service"
 	"strconv"
 )
 //@TagName 用户模块
 //@Description 用户相关接口
-type Users struct {
-	model *models.Users
+type UsersController struct {
+	model *models.UsersModel
+	serv *service.UsersService
 }
 
 // @Title Get
@@ -26,11 +28,11 @@ type Users struct {
 // @Success 200 {object} ApiResonse
 // @Failure 500 system err
 // @router /createToken [get]
-func (u *Users) Get(c *gin.Context) {
+func (u *UsersController) Get(c *gin.Context) {
 	fieldsArr := []string{"id", "username", "mobile"}
 	params := getCommonParams(c)
 	params["conditions"] = getParams(c, fieldsArr)
-	users, err := u.model.GetUser(params)
+	users, err := u.serv.Find(params)
 	if err != nil {
 		resError(c, 1000, err.Error())
 		return
@@ -45,9 +47,9 @@ func (u *Users) Get(c *gin.Context) {
 // @Success 200 {object} ApiResonse
 // @Failure 500 system err
 // @router /createToken [get, post, put, delete]
-func (u *Users) GetId(c *gin.Context) {
+func (u *UsersController) GetId(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
-	user, err := u.model.GetById(id)
+	user, err := u.serv.FindById(id)
 	if err != nil {
 		resError(c, 1000, err.Error())
 		return
@@ -66,9 +68,9 @@ func (u *Users) GetId(c *gin.Context) {
 // @Success 200 {object} ApiResonse
 // @Failure 500 system err
 // @router /createToken [post]
-func (u *Users) Create(c *gin.Context) {
+func (u *UsersController) Create(c *gin.Context) {
 	userStruct := getUserBody(c)
-	err := u.model.Insert(userStruct)
+	err := u.serv.Insert(userStruct)
 	if err != nil {
 		resError(c, et.EntitySystemError, err.Error())
 		return
@@ -88,13 +90,13 @@ func (u *Users) Create(c *gin.Context) {
 // @Success 200 {object} ApiResonse
 // @Failure 500 system err
 // @router /createToken [put]
-func (u *Users) Update(c *gin.Context) {
+func (u *UsersController) Update(c *gin.Context) {
 	userStruct := getUserBody(c)
 	if c.Param("id") != c.PostForm("id") {
 		resError(c, et.EntityForbidden, "Id为非法参数")
 	}
 	idInt, _ := strconv.Atoi(c.PostForm("id"))
-	_, err := u.model.Update(idInt, userStruct)
+	_, err := u.serv.UpdateById(idInt, userStruct)
 	if err != nil {
 		resError(c, et.EntitySystemError, err.Error())
 		return

@@ -8,9 +8,9 @@ import (
 )
 
 func InitRouter() *gin.Engine {
-	cts := Contents{}
-	users := Users{}
-	demo := Demo{}
+	cts := ContentsController{}
+	users := UsersController{}
+	demo := DemoController{}
 	router := gin.Default()
 	router.Use(exception.Recover())
 	idx := router.Group("/")
