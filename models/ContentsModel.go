@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/juju/errors"
 	. "gpi/entities"
-	DB "gpi/libriries/database"
+	DB "gpi/libraries/database"
 	"strings"
 	"time"
 )
@@ -19,7 +19,7 @@ type ContentsModel struct {
  */
 func (u *ContentsModel) GetContents(params gin.H) ([]GinContents, error) {
 	Contents := make([]GinContents, 0)
-	dbConn := DB.GetDB()
+	dbConn := DB.GetDB(Gin)
 	dbC := dbConn.Where("1")
 	for key, val := range params["conditions"].(map[string]string) {
 		if len(val) > 0 {
@@ -55,7 +55,7 @@ func (u *ContentsModel) GetContents(params gin.H) ([]GinContents, error) {
  */
 func (u *ContentsModel) GetById(id int) (*GinContents, error) {
 	user := &GinContents{Id: id}
-	dbConn := DB.GetDB()
+	dbConn := DB.GetDB(Gin)
 	_, err := dbConn.Get(user)
 	return user, err
 }
@@ -66,7 +66,7 @@ func (u *ContentsModel) Insert(conn *GinContents) (err error) {
 		return err
 	}
 	conn.OpTime = time.Now()
-	dbConn := DB.GetDB()
+	dbConn := DB.GetDB(Gin)
 	affected, err := dbConn.Insert(conn)
 	if err == nil && affected < 1 {
 		err = errors.New("插入影响行数: 0")
@@ -76,14 +76,14 @@ func (u *ContentsModel) Insert(conn *GinContents) (err error) {
 
 func (u *ContentsModel) UpdateById(id int, conn *GinContents) (affected int64, err error) {
 	conn.OpTime = time.Now()
-	dbConn := DB.GetDB()
+	dbConn := DB.GetDB(Gin)
 	affected, err = dbConn.Id(id).Update(conn)
 	return
 }
 
 func (u *ContentsModel) Delete(id int) error {
 	conn := new(GinContents)
-	dbConn := DB.GetDB()
+	dbConn := DB.GetDB(Gin)
 	affected, err := dbConn.Id(id).Delete(conn)
 	if err == nil && affected < 1 {
 		err = errors.New("插入影响行数: 0")

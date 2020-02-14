@@ -1,24 +1,34 @@
 package wmail
 
 import (
+	"gpi/config"
 	"crypto/tls"
+	"encoding/json"
 	"gopkg.in/gomail.v2"
-	"gpi/libriries/config"
+	"strings"
 )
 
 func SendMail(mailTo []string,subject string, body string ) error {
-	conf := config.Conf.GetStringMap("email")
+	conf := config.EmailConfStruct
 	m := gomail.NewMessage()
-	m.SetHeader("From","gpi-system" + "<" + conf["user"].(string) + ">")
+	m.SetHeader("From",config.AppName + "<" + conf.User + ">")
 	m.SetHeader("To", mailTo...)  //发送给多个用户
 	m.SetHeader("Subject", subject)  //设置邮件主题
 	m.SetBody("text/html", body)     //设置邮件正文
 	d := gomail.NewDialer(
-		conf["host"].(string),
-		conf["port"].(int),
-		conf["user"].(string),
-		conf["passwd"].(string))
+		conf.Host,
+		conf.Port,
+		conf.User,
+		conf.Passwd,
+	)
 	d.TLSConfig = &tls.Config{InsecureSkipVerify: true}
 	err := d.DialAndSend(m)
 	return err
+}
+
+func SendErrMail(body interface{}) error {
+	bodyByte, _ := json.Marshal(body)
+	conf := config.EmailConfStruct
+	mailTo := strings.Split(conf.To, ",")
+	return SendMail(mailTo, conf.ErrTopic, string(bodyByte))
 }

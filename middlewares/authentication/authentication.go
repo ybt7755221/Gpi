@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	et "gpi/entities"
-	"gpi/libriries/verify"
+	"gpi/libraries/verify"
 )
 //数据验证-中间件
 func Verify(c *gin.Context) {

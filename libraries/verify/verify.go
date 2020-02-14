@@ -5,46 +5,43 @@ import (
 	"encoding/hex"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"gpi/libriries/config"
 	"net/url"
+	"gpi/config"
 	"sort"
 )
 
 func GenerateToken(c *gin.Context) (string, string) {
 	var rawStr string
-	conf := config.GetSectionMapString("auth")
 	methodStr := c.Request.Method
 	if methodStr == "GET" {
 		rawStr = getParams(c.Request.URL.Query())
-	} else {
+	}else{
 		rawStr = getParams(c.Request.PostForm)
 	}
-	rawStr = fmt.Sprintf("%s&%s&%s", conf["app_id"], rawStr, conf["secret"])
+	rawStr = fmt.Sprintf("%s&%s", rawStr, config.Secret)
 	return rawStr, GenerateMD5(rawStr, 32)
 }
 
 //处理参数
 func getParams(data url.Values) string {
-	delete(data, "app_id")
 	delete(data, "token")
-	if len(data) > 0 {
-		keys := make([]string, 0)
+	if(len(data) > 0) {
+		keys := make([]string,0)
 		for key, _ := range data {
 			keys = append(keys, key)
 		}
 		sort.Strings(keys)
 		var paramsStr string
 		for _, val := range keys {
-			if val != "token" && val != "app_id" {
+			if val != "token" {
 				paramsStr += val + "&" + data.Get(val) + "&"
 			}
 		}
 		return paramsStr[0 : len(paramsStr)-1]
-	} else {
+	}else{
 		return ""
 	}
 }
-
 //获取md5
 func GenerateMD5(raw string, size int) string {
 	md5H := md5.New()

@@ -3,10 +3,9 @@ package controllers
 import (
 	"github.com/gin-gonic/gin"
 	et "gpi/entities"
-	"gpi/libriries/config"
-	"gpi/libriries/redis"
-	"gpi/libriries/verify"
-	"gpi/libriries/wmail"
+	"gpi/libraries/redis"
+	"gpi/libraries/verify"
+	"gpi/libraries/wmail"
 	"time"
 )
 
@@ -42,7 +41,7 @@ func (d *DemoController) Token(c *gin.Context) {
 
 func (d *DemoController) GetConf(c *gin.Context) {
 	time.Sleep(3 * time.Second)
-	resSuccess(c, config.Conf.GetStringMap(c.Query("section")))
+	resSuccess(c, c.Query("section"))
 }
 
 func (d *DemoController) Email(c *gin.Context) {
@@ -55,8 +54,8 @@ func (d *DemoController) Email(c *gin.Context) {
 }
 
 func (d *DemoController) Redis(c *gin.Context) {
-	redis.Cli.Set("burtyu", "30", 30*time.Second)
-	res, _ := redis.Cli.Get("burtyu").Result()
+	redis.Cache.Set("burtyu", "30", 30*time.Second)
+	res, _ := redis.Cache.Get("burtyu").Result()
 	resSuccess(c, gin.H{
 		"age" : res,
 	})

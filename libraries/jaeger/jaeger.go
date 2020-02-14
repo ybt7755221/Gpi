@@ -5,21 +5,20 @@ import (
 	"github.com/opentracing/opentracing-go"
 	"github.com/uber/jaeger-client-go"
 	"github.com/uber/jaeger-client-go/config"
-	conf "gpi/libriries/config"
+	conf "gpi/config"
 	"io"
 )
 
 func InitJaeger(service string) (opentracing.Tracer, io.Closer) {
-	jaegerConf := conf.Conf.GetStringMapString("jaeger")
 	cfg := &config.Configuration{
 		ServiceName:service,
 		Sampler: &config.SamplerConfig{
-			Type: jaegerConf["type"],
+			Type: conf.JaegerType,
 			Param: 1,
 		},
 		Reporter: &config.ReporterConfig{
 			LogSpans: true,
-			LocalAgentHostPort: jaegerConf["host"]+":"+jaegerConf["port"],
+			LocalAgentHostPort: conf.JaegerHost+":"+conf.JaegerPort,
 		},
 	}
 	tracer, closer, err := cfg.NewTracer(config.Logger(jaeger.StdLogger))

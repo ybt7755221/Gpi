@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/opentracing/opentracing-go"
 	"github.com/opentracing/opentracing-go/ext"
-	"gpi/libriries/jaeger"
+	"gpi/libraries/jaeger"
 )
 
 func Listen() gin.HandlerFunc {

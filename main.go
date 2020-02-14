@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"gpi/libriries/config"
-	"gpi/libriries/elog"
+	"gpi/config"
+	"gpi/libraries/elog"
 	"gpi/router"
 	"net/http"
 	"time"
@@ -11,8 +11,8 @@ import (
 
 func main() {
 	routers := router.InitRouter()
-	duration := config.Conf.GetInt64("sys.duration")
-	port := config.Conf.GetString("sys.port")
+	duration := config.Duration
+	port := config.HttpPort
 	serv := &http.Server{
 		Addr:           ":" + port,
 		Handler:        routers,
@@ -21,7 +21,7 @@ func main() {
 		MaxHeaderBytes: 1 << 20,
 	}
 	if err := serv.ListenAndServe(); err != nil {
-		elog.ErrMail(nil, err.Error())
+		elog.ErrMail(err.Error(), elog.GetFileInfo())
 	} else {
 		fmt.Println("The Server Listen Port is " + port)
 	}

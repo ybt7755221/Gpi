@@ -4,8 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/juju/errors"
 	. "gpi/entities"
-	DB "gpi/libriries/database"
-	"gpi/libriries/verify"
+	DB "gpi/libraries/database"
+	"gpi/libraries/verify"
 	"strings"
 	"time"
 )
@@ -19,7 +19,7 @@ type UsersModel struct {
  * @return {object} []GinUsers, {object} error
  */
 func (u *UsersModel) GetUser(params gin.H) ([]GinUsers, error) {
-	dbConn := DB.GetDB()
+	dbConn := DB.GetDB(Gin)
 	defer dbConn.Close()
 	users := make([]GinUsers, 0)
 	dbC := dbConn.Where("1")
@@ -57,7 +57,7 @@ func (u *UsersModel) GetUser(params gin.H) ([]GinUsers, error) {
  */
 func (u *UsersModel) GetById(id int) (*GinUsers, error) {
 	user := &GinUsers{Id: id}
-	dbConn := DB.GetDB()
+	dbConn := DB.GetDB(Gin)
 	_, err := dbConn.Get(user)
 	defer dbConn.Close()
 	return user, err
@@ -77,7 +77,7 @@ func (u *UsersModel) Insert(user *GinUsers) (err error) {
 	user.Password = verify.GenerateMD5(user.Password, 32)
 	user.CreateTime = time.Now()
 	user.UpdateTime = time.Now()
-	dbConn := DB.GetDB()
+	dbConn := DB.GetDB(Gin)
 	affected, err := dbConn.Insert(user)
 	defer dbConn.Close()
 	if affected < 1 {
@@ -92,7 +92,7 @@ func (u *UsersModel) UpdateById(id int, user *GinUsers) (affected int64, err err
 		user.Password = verify.GenerateMD5(user.Password, 32)
 	}
 	user.UpdateTime = time.Now()
-	dbConn := DB.GetDB()
+	dbConn := DB.GetDB(Gin)
 	affected, err = dbConn.Id(id).Update(user)
 	defer dbConn.Close()
 	return
