@@ -13,11 +13,6 @@ import (
 type UsersModel struct {
 }
 
-/**
- * 获取用户信息
- * @Param params 请求参数
- * @return {object} []GinUsers, {object} error
- */
 func (u *UsersModel) GetUser(params gin.H) ([]GinUsers, error) {
 	dbConn := DB.GetDB(Gin)
 	defer dbConn.Close()
@@ -48,13 +43,6 @@ func (u *UsersModel) GetUser(params gin.H) ([]GinUsers, error) {
 	return users, err
 }
 
-/**
- * 根据Id获取用户信息
- * @Param params 请求参数
- * @Param offset 起始
- * @Param limit  长度
- * @return {object} GinUsers, {object} error
- */
 func (u *UsersModel) GetById(id int) (*GinUsers, error) {
 	user := &GinUsers{Id: id}
 	dbConn := DB.GetDB(Gin)

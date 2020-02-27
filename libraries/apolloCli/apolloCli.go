@@ -3,16 +3,27 @@ package apolloCli
 import (
 	"fmt"
 	"github.com/shima-park/agollo"
+	"os"
+	"strings"
 )
 
 const (
-	AppId = "Gpi"
-	Ip = "127.0.0.1"
+	AppId = "xxxx"
+	IpFAT = "http://localhost"
+	IpPRO = "http://localhost"
 	NameSpacename = "application"
-	BackUpFile = "/Users/Burt/Work/logs/application.agollo"
+	BackUpFile = "/etc/application.agollo"
 )
+var confMap map[string]interface{}
 
 func OptionInit() map[string]interface{} {
+	env := os.Getenv("ACTIVE")
+	var Ip string
+	if strings.ToLower(env) == "pro" {
+		Ip = IpPRO
+	}else{
+		Ip = IpFAT
+	}
 	apoCli, err := agollo.New(Ip, AppId,
 		agollo.BackupFile(BackUpFile),
 		agollo.FailTolerantOnBackupExists(),
@@ -23,7 +34,7 @@ func OptionInit() map[string]interface{} {
 	}else{
 		fmt.Println("apollo start is successd")
 	}
-	confMap := apoCli.GetNameSpace(NameSpacename)
+	confMap = apoCli.GetNameSpace(NameSpacename)
 	apoCli.Start()  // Start后会启动goroutine监听变化，
 	go func() {
 		watchCh := apoCli.Watch()
@@ -32,8 +43,13 @@ func OptionInit() map[string]interface{} {
 			case resp := <-watchCh:
 				txtFile := "【Apollo Update】Apollo has modified！Namespace is "+resp.Namespace
 				fmt.Println(txtFile)
+				confMap = apoCli.GetNameSpace(NameSpacename)
 			}
 		}
 	}()
+	return confMap
+}
+
+func GetApolloConfig() map[string]interface{} {
 	return confMap
 }

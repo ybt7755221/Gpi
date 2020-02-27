@@ -1,6 +1,7 @@
 package config
 
 import (
+	"gpi/libraries/apolloCli"
 	"strconv"
 )
 
@@ -14,7 +15,7 @@ const (
 	EmailHost 	= "smtp.163.com"
 	EmailPort 	= "25"
 	EmailUser 	= "burt_yu@163.com"
-	EmailPasswd	= "Burtyu1989"
+	EmailPasswd	= "XXXXXXXX"
 	EmailTo		= "ybt7755221@sohu.com"
 	EmailErrTopic = "【Gpi系统】报错"
 	JaegerHost = "127.0.0.1"
@@ -25,15 +26,15 @@ const (
 var ApoCli map[string]interface{}
 
 func init() {
-	ApoCli = map[string]interface{}{}
-	//ApoCli = apolloCli.OptionInit() //如果使用apollo用这个替换上面的
+	apolloCli.OptionInit()
 }
 
 func GetApolloString(key string, defValue string) string {
-	if ApoCli[key] == nil {
+	apoCli := apolloCli.GetApolloConfig()
+	if apoCli[key] == nil {
 		return defValue
 	}
-	return ApoCli[key].(string)
+	return apoCli[key].(string)
 }
 
 func GetApolloInt(key string, defValue int) int {

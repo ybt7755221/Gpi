@@ -12,11 +12,6 @@ import (
 type ContentsModel struct {
 }
 
-/**
- * 获取用户信息
- * @Param params 请求参数
- * @return {object} []GinContents, {object} error
- */
 func (u *ContentsModel) GetContents(params gin.H) ([]GinContents, error) {
 	Contents := make([]GinContents, 0)
 	dbConn := DB.GetDB(Gin)
@@ -46,13 +41,6 @@ func (u *ContentsModel) GetContents(params gin.H) ([]GinContents, error) {
 	return Contents, err
 }
 
-/**
- * 根据Id获取用户信息
- * @Param params 请求参数
- * @Param offset 起始
- * @Param limit  长度
- * @return {object} GinContents, {object} error
- */
 func (u *ContentsModel) GetById(id int) (*GinContents, error) {
 	user := &GinContents{Id: id}
 	dbConn := DB.GetDB(Gin)
