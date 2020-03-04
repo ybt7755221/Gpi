@@ -21,6 +21,8 @@ Gin
 >   - redis &nbsp;&nbsp;&nbsp;&nbsp;//redis链接库
 >   - verify &nbsp;&nbsp;&nbsp;&nbsp;//验证功能库
 >   - wmail &nbsp;&nbsp;&nbsp;&nbsp;//邮件功能库
+>   - apolloCli &nbsp;&nbsp;&nbsp;&nbsp;//连接apollo库
+>   - httpReq &nbsp;&nbsp;&nbsp;&nbsp;//发送http请求
 > * middlewares &nbsp;&nbsp;&nbsp;&nbsp;//中间件
 >   - authentication &nbsp;&nbsp;&nbsp;&nbsp;//route验证中间件
 >   - exception &nbsp;&nbsp;&nbsp;&nbsp;//统一的异常捕获中间件

@@ -8,7 +8,7 @@ import (
 const (
 	AppName 	= "Gpi"
 	Secret 		= "Dl*sCKW7C{SfYiPtYX*O5/71vG9&sm?2U"
-	HttpPort 	= "9090"
+	HttpPort 	= "8080"
 	Duration 	= 2
 	LogPath  	= "/Users/Burt/Work/logs"
 	PanicPath 	= "/Users/Burt/Work/logs"
@@ -21,6 +21,7 @@ const (
 	JaegerHost = "127.0.0.1"
 	JaegerPort = "6831"
 	JaegerType = "const"
+	UseApollo  = false
 )
 
 var ApoCli map[string]interface{}
