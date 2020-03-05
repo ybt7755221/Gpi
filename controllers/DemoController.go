@@ -17,8 +17,7 @@ type DemoController struct {
 // @Description 获取token接口
 // @Param	app_id 	query  	string  true  "验证id"
 // @Param	token	query  	string  true  "验证参数"
-// @Success 200 {object} ApiResonse
-// @Failure 500 system err
+// @Success 200 {string} string "{"code":200,"data":{},"msg":"请求成功"}"
 // @router /createToken [post]
 func (d *DemoController) Token(c *gin.Context) {
 	var ts string

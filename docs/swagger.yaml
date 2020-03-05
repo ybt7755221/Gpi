@@ -1,0 +1,164 @@
+info:
+  contact: {}
+  license: {}
+paths:
+  /createToken:
+    post:
+      description: 获取token接口
+      parameters:
+      - description: 验证id
+        in: query
+        name: app_id
+        required: true
+        type: string
+      - description: 验证参数
+        in: query
+        name: token
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{"code":200,"data":{},"msg":"请求成功"}'
+          schema:
+            type: string
+      summary: 获取token接口
+  /user/:
+    post:
+      description: 创建用户接口
+      parameters:
+      - description: 用户名（拼音）
+        in: query
+        name: username
+        required: true
+        type: string
+      - description: 密码
+        in: query
+        name: password
+        required: true
+        type: string
+      - description: 用户名（中文）
+        in: query
+        name: fullname
+        type: string
+      - description: 用户手机
+        in: query
+        name: mobile
+        required: true
+        type: string
+      - description: 用户邮箱
+        in: query
+        name: email
+        type: string
+      - description: 验证参数
+        in: query
+        name: token
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{"code":200,"data":{},"msg":"请求成功"}'
+          schema:
+            type: string
+      summary: 创建用户接口
+    put:
+      description: 根据Id更新用户接口
+      parameters:
+      - description: 验证参数
+        in: query
+        name: id
+        required: true
+        type: string
+      - description: 用户名（拼音）
+        in: query
+        name: username
+        type: string
+      - description: 密码
+        in: query
+        name: password
+        type: string
+      - description: 用户名（中文）
+        in: query
+        name: fullname
+        type: string
+      - description: 用户手机
+        in: query
+        name: mobile
+        type: string
+      - description: 用户邮箱
+        in: query
+        name: email
+        type: string
+      - description: 验证参数
+        in: query
+        name: token
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{"code":200,"data":{},"msg":"请求成功"}'
+          schema:
+            type: string
+      summary: 根据Id更新用户接口
+  /user/get:
+    get:
+      description: 获取用户接口
+      parameters:
+      - description: id
+        in: query
+        name: id
+        type: string
+      - description: 用户名
+        in: query
+        name: username
+        type: string
+      - description: 手机号
+        in: query
+        name: mobile
+        type: string
+      - description: 起始位置；默认0
+        in: query
+        name: offset
+        type: string
+      - description: 获取条数；默认20
+        in: query
+        name: limit
+        type: string
+      - description: 排序字段；默认id
+        in: query
+        name: sortField
+        type: string
+      - description: 排序顺序：1-正序，2-倒叙；默认2
+        in: query
+        name: sort
+        type: string
+      - description: 验证参数
+        in: query
+        name: token
+        type: string
+      responses:
+        "200":
+          description: '{"code":200,"data":{},"msg":"请求成功"}'
+          schema:
+            type: string
+      summary: 获取用户接口
+  /user/get-id:
+    get:
+      description: 根据Id获取用户接口
+      parameters:
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: string
+      - description: 验证参数
+        in: query
+        name: token
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{"code":200,"data":{},"msg":"请求成功"}'
+          schema:
+            type: string
+      summary: 根据Id获取用户接口
+swagger: "2.0"

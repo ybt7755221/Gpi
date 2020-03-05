@@ -23,9 +23,8 @@ type UsersController struct {
 // @Param	sortField query string false	"排序字段；默认id"
 // @param   sort	  query string false "排序顺序：1-正序，2-倒叙；默认2"
 // @param   token	  query string false "验证参数"
-// @Success 200 {object} ApiResonse
-// @Failure 500 system err
-// @router /createToken [get]
+// @Success 200 {string} string "{"code":200,"data":{},"msg":"请求成功"}"
+// @router /user/get [get]
 func (u *UsersController) Get(c *gin.Context) {
 	fieldsArr := []string{"id", "username", "mobile"}
 	params := getCommonParams(c)
@@ -42,9 +41,8 @@ func (u *UsersController) Get(c *gin.Context) {
 // @Description 根据Id获取用户接口
 // @Param	id 		query  	string  true  "id"
 // @Param	token	query  	string  true  "验证参数"
-// @Success 200 {object} ApiResonse
-// @Failure 500 system err
-// @router /createToken [get, post, put, delete]
+// @Success 200 {string} string "{"code":200,"data":{},"msg":"请求成功"}"
+// @router /user/get-id [get]
 func (u *UsersController) GetId(c *gin.Context) {
 	id, _ := strconv.Atoi(c.Param("id"))
 	user, err := u.serv.FindById(id)
@@ -63,9 +61,8 @@ func (u *UsersController) GetId(c *gin.Context) {
 // @Param	mobile	 	query  	string  true  "用户手机"
 // @Param	email	 	query  	string  false "用户邮箱"
 // @Param	token	 	query  	string  true  "验证参数"
-// @Success 200 {object} ApiResonse
-// @Failure 500 system err
-// @router /createToken [post]
+// @Success 200 {string} string "{"code":200,"data":{},"msg":"请求成功"}"
+// @router /user/ [post]
 func (u *UsersController) Create(c *gin.Context) {
 	userStruct := getUserBody(c)
 	err := u.serv.Insert(userStruct)
@@ -85,9 +82,8 @@ func (u *UsersController) Create(c *gin.Context) {
 // @Param	mobile	 	query  	string  false "用户手机"
 // @Param	email	 	query  	string  false "用户邮箱"
 // @Param	token	 	query  	string  true  "验证参数"
-// @Success 200 {object} ApiResonse
-// @Failure 500 system err
-// @router /createToken [put]
+// @Success 200 {string} string "{"code":200,"data":{},"msg":"请求成功"}"
+// @router /user/ [put]
 func (u *UsersController) Update(c *gin.Context) {
 	userStruct := getUserBody(c)
 	if c.Param("id") != c.PostForm("id") {

@@ -2,9 +2,12 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	. "gpi/controllers"
 	"gpi/middlewares/authentication"
 	"gpi/middlewares/exception"
+	_ "gpi/docs"
 )
 
 func InitRouter() *gin.Engine {
@@ -15,6 +18,7 @@ func InitRouter() *gin.Engine {
 	router.Use(exception.Recover())
 	idx := router.Group("/")
 	{
+		idx.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 		idx.GET("/", func(c *gin.Context) {
 			c.String(200, "Gpi系统首页")
 		})
