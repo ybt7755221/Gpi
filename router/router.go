@@ -76,7 +76,7 @@ func ginUsersRouter(router *gin.Engine) {
 	{
 		ginUsersR.GET("/", ginUsers.Find)
 		ginUsersR.POST("/", ginUsers.Create)
-		ginUsersR.GET("/get-by-id/:id", ginUsers.FindById)
+		ginUsersR.GET("/:id", ginUsers.FindById)
 		ginUsersR.POST("/update-by-id", ginUsers.UpdateById)
 	}
 }
@@ -87,8 +87,8 @@ func ginContentsRouter(router *gin.Engine) {
 	{
 		ginContentsR.GET("/", ginContents.Find)
 		ginContentsR.POST("/", ginContents.Create)
-		ginContentsR.GET("/get-by-id/:id", ginContents.FindById)
-		ginContentsR.POST("/update-by-id", ginContents.UpdateById)
+		ginContentsR.GET("/:id", ginContents.FindById)
+		ginContentsR.PUT("/update-by-id", ginContents.UpdateById)
 	}
 }
 

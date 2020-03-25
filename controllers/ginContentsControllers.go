@@ -39,7 +39,7 @@ func (c *GinContentsController) Find(ctx *gin.Context) {
 // @Produce json
 // @Param   id		path	string 	false	"主键id"
 // @Success 200 {object} SgrResp
-// @Router /contents/get-by-id/{id} [get]
+// @Router /contents/{id} [get]
 func (c *GinContentsController) FindById(ctx *gin.Context) {
 	id, _ := strconv.Atoi(ctx.Param("id"))
 	ginContents, err := c.serv.FindById(id)
@@ -72,7 +72,7 @@ func (c *GinContentsController) Create(ctx *gin.Context) {
 // @Produce json
 // @Param   id	body	string 	true	"主键更新依据此id"
 // @Success 200 {object} SgrResp
-// @Router /contents/update-by-id [post]
+// @Router /contents/update-by-id [put]
 func (c * GinContentsController) UpdateById(ctx *gin.Context) {
 	id, _ := strconv.Atoi(ctx.PostForm("id"))
 	ginContents := new(et.GinContents)
