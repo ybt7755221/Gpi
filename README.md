@@ -52,6 +52,17 @@
 
 &nbsp;&nbsp;&nbsp;&nbsp;通过工具生成后，将需要的表的实例放入项目下的entities,修改包名（自动生成的包名为model）
 
+##### 自动生成项目文件
+&nbsp;&nbsp;&nbsp;&nbsp; Linux/Mac:
+
+    ./gtool -t GinContents -r contents -d Gin -c true -f ./
+
+&nbsp;&nbsp;&nbsp;&nbsp; Windows:
+
+    ./gtool.exe -t GinContents -r contents -d Gin -c true -f ./
+    
+Windows需要下载 [gtool](https://github.com/ybt7755221/gtool) 自己编译exe文件
+
 ---
 #### 部分apollo配置说明：
 
