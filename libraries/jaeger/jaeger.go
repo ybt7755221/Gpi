@@ -10,15 +10,16 @@ import (
 )
 
 func InitJaeger(service string) (opentracing.Tracer, io.Closer) {
+	jaegerConf := conf.JaegerConf{}
 	cfg := &config.Configuration{
 		ServiceName:service,
 		Sampler: &config.SamplerConfig{
-			Type: conf.JaegerType,
+			Type: jaegerConf.Type,
 			Param: 1,
 		},
 		Reporter: &config.ReporterConfig{
 			LogSpans: true,
-			LocalAgentHostPort: conf.JaegerHost+":"+conf.JaegerPort,
+			LocalAgentHostPort: jaegerConf.Host+":"+jaegerConf.Port,
 		},
 	}
 	tracer, closer, err := cfg.NewTracer(config.Logger(jaeger.StdLogger))

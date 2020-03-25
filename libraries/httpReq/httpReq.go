@@ -11,9 +11,9 @@ import (
 )
 
 type IRequest interface {
-	Get(wechatUrl string) (map[string]interface{}, error)
-	PostJson(wechatUrl string, data interface{}) (map[string]interface{}, error)
-	PostForm(wechatUrl string, data url.Values) (map[string]interface{}, error)
+	Get(url string) (map[string]interface{}, error)
+	PostJson(url string, data interface{}) (map[string]interface{}, error)
+	PostForm(url string, data url.Values) (map[string]interface{}, error)
 }
 //contentType常量
 const (
@@ -28,9 +28,9 @@ type Request struct {
 }
 
 
-func (r Request) Get(wechatUrl string) (map[string]interface{}, error) {
+func (r Request) Get(url string) (map[string]interface{}, error) {
 	client := &http.Client{Timeout: getTimeout(r.Timeout)}
-	res, err := client.Get(wechatUrl)
+	res, err := client.Get(url)
 	fmt.Println(err)
 	if err != nil {
 		return nil, err
@@ -40,12 +40,11 @@ func (r Request) Get(wechatUrl string) (map[string]interface{}, error) {
 	return mp, err
 }
 
-func (r Request) PostJson(wechatUrl string, data interface{}) (map[string]interface{}, error) {
+func (r Request) PostJson(url string, data interface{}) (map[string]interface{}, error) {
 	client := &http.Client{Timeout: getTimeout(r.Timeout)}
 	jsonStr, _ := json.Marshal(data)
 	contentType := JSON
-	fmt.Println(contentType)
-	res, err := client.Post(wechatUrl, contentType, bytes.NewBuffer(jsonStr))
+	res, err := client.Post(url, contentType, bytes.NewBuffer(jsonStr))
 	if err != nil {
 		return nil, err
 	}
@@ -53,8 +52,8 @@ func (r Request) PostJson(wechatUrl string, data interface{}) (map[string]interf
 	return parseResponse(res)
 }
 
-func (r Request) PostForm(wechatUrl string, data url.Values) (map[string]interface{}, error) {
-	resp, err := http.PostForm(wechatUrl, data)
+func (r Request) PostForm(url string, data url.Values) (map[string]interface{}, error) {
+	resp, err := http.PostForm(url, data)
 	if err != nil {
 		fmt.Printf("get request failed, err:[%s]", err.Error())
 		return nil, err

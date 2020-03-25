@@ -1,42 +1,78 @@
-# gpi
+## &nbsp;&nbsp;&nbsp;&nbsp;Gpi是一个基于gin的api微服务封装
 
-&nbsp;&nbsp;&nbsp;&nbsp;Gpi是一个基于gin的api微服务封装
-## Information
 
-#### Framework
+#### 介绍:
 
-Gin
+##### 目录结构:
 
-#### Folder
+- controllers -- 处理入参，出参
+- entities -- 数据库实例
+- models -- 数据库操作
+- service -- 处理业务逻辑
+- router -- 路由
+- middlewares -- 中间件
+- libraries -- 工具库
 
-> gpi
-> * config &nbsp;&nbsp;&nbsp;&nbsp;//配置文件目录 
->  - config.yml &nbsp;&nbsp;&nbsp;&nbsp;//yaml格式配置文件
-> * controllers &nbsp;&nbsp;&nbsp;&nbsp;//控制器 
-> * entities &nbsp;&nbsp;&nbsp;&nbsp;//数据库实例 
-> * libriries &nbsp;&nbsp;&nbsp;&nbsp;//应用库，包括mysql，redis，email等功能的基类封装
->   - config &nbsp;&nbsp;&nbsp;&nbsp;//config获取配置功能库
->   - database &nbsp;&nbsp;&nbsp;&nbsp;//获取数据库功能库
->   - elog &nbsp;&nbsp;&nbsp;&nbsp;//log处理log库
->   - redis &nbsp;&nbsp;&nbsp;&nbsp;//redis链接库
->   - verify &nbsp;&nbsp;&nbsp;&nbsp;//验证功能库
->   - wmail &nbsp;&nbsp;&nbsp;&nbsp;//邮件功能库
->   - apolloCli &nbsp;&nbsp;&nbsp;&nbsp;//连接apollo库
->   - httpReq &nbsp;&nbsp;&nbsp;&nbsp;//发送http请求
-> * middlewares &nbsp;&nbsp;&nbsp;&nbsp;//中间件
->   - authentication &nbsp;&nbsp;&nbsp;&nbsp;//route验证中间件
->   - exception &nbsp;&nbsp;&nbsp;&nbsp;//统一的异常捕获中间件
->   - limiter &nbsp;&nbsp;&nbsp;&nbsp;//限流中间件（padding）
->   - timeout &nbsp;&nbsp;&nbsp;&nbsp;//超时返回504中间件（developing）
-> * models &nbsp;&nbsp;&nbsp;&nbsp;//数据模型 
-> * router &nbsp;&nbsp;&nbsp;&nbsp;//路由 
-> * tmp &nbsp;&nbsp;&nbsp;&nbsp;//tmp 
-> * vendor &nbsp;&nbsp;&nbsp;&nbsp;//框架及组件目录 
-> * main.go &nbsp;&nbsp;&nbsp;&nbsp;//启动文件
-## Install
-注意在环境变量里加入GPIACTIVE(fat-测试, pro-正式)
-## Milestone
-* milestone1 (2019-10-26)
-  - 由GOROOT模式改为module模式，并针对1.13进行优化处理 
+##### libraries:
 
++ apolloCli - apollo连接库
++ database - 数据库连接库
++ efile - 文件操作库
++ elog - 错误日志库
++ redis - redis链接库
++ verify - 数据校验库
++ wmail - 邮件库
++ mongo - mongo连接库
+---
+#### 安装说明：
+
+##### 安装
+&nbsp;&nbsp;&nbsp;&nbsp;下载项目，在项目根目录运行：（本地测试推荐）
+    
+    go mod tidy
+    go mod download
+    go run main.go
+&nbsp;&nbsp;&nbsp;&nbsp;or 编译后运行编译文件：
+
+    go build
+    ./main
+    
+##### 修改apollo配置
+    //如果要使用apollo，修改配置
+    const (
+      	AppId = ""  //apollo app id
+      	IpFAT = ""  //测试 apollo ip
+      	IpPRO = ""  //正式 apollo ip
+      	NameSpacename = "application"           //默认spacename
+      	BackUpFile = "/etc/application.agollo"  //本地备份文件地址
+    )
+
+##### 自动生成entities
+&nbsp;&nbsp;&nbsp;&nbsp;参见 [xorm工具](http://gobook.io/read/gitea.com/xorm/manual-zh-CN/chapter-13/index.html)
+
+&nbsp;&nbsp;&nbsp;&nbsp;通过工具生成后，将需要的表的实例放入项目下的entities,修改包名（自动生成的包名为model）
+
+---
+#### 部分apollo配置说明：
+
+&nbsp;&nbsp;&nbsp;&nbsp;环境变量
+    
+    ENVIRONMENT = fat   //判断apollo是测试还是正式
+&nbsp;&nbsp;&nbsp;&nbsp;如需要判断项目优先使用：   
+    
+    os.Getenv("ACTIVE") //判断docker环境是正式测试
+
+&nbsp;&nbsp;&nbsp;&nbsp;是否开启prof（性能监控工具建议正式性能优化时开启，其他时间关闭）： 
+    
+    PPROF_STATUS = start
+    
+&nbsp;&nbsp;&nbsp;&nbsp; authentication中间件里的验签的secret
+    
+    SECRET = Dl*sCKW7C{SfYiPtYX*O5/71vG9&sm?2U
+    
+---
+#### 参考文档地址
+
++ [xorm数据库操作文档](http://gobook.io/read/gitea.com/xorm/manual-zh-CN/#)
++ [xormplus](https://www.kancloud.cn/xormplus/xorm/167093)
 

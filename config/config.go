@@ -6,25 +6,24 @@ import (
 )
 
 const (
-	AppName 	= "Gpi"
-	Secret 		= "Dl*sCKW7C{SfYiPtYX*O5/71vG9&sm?2U"
-	HttpPort 	= "8080"
-	Duration 	= 2
-	LogPath  	= "/Users/Burt/Work/logs"
-	PanicPath 	= "/Users/Burt/Work/logs"
-	EmailHost 	= "smtp.163.com"
-	EmailPort 	= "25"
-	EmailUser 	= "burt_yu@163.com"
-	EmailPasswd	= "XXXXXXXX"
-	EmailTo		= "ybt7755221@sohu.com"
-	EmailErrTopic = "【Gpi系统】报错"
-	JaegerHost = "127.0.0.1"
-	JaegerPort = "6831"
-	JaegerType = "const"
-	UseApollo  = false
+	AppName 	  = "Gpi"
+	Secret 		  = "Dl*sCKW7C{SfYiPtYX*O5/71vG9&sm?2U"
+	HttpPort 	  = "9090"
+	Duration 	  = "TIMEOUT"
+	LogPath  	  = "/data/logs"
+	WechatUrl	  = "WECHAT"
+	WechattoUser  = "WECHAT_TOUSER"
+	WechatSecret  = "WECHAT_SECRET"
+	WechatAppkey  = "WECHAT_APPKEY"
+	KafkaUrl	  = "KFKURL"
+	KafKaProt	  = "KFKPORT"
 )
 
-var ApoCli map[string]interface{}
+type JaegerConf struct {
+	Host string
+	Port string
+	Type string
+}
 
 func init() {
 	apolloCli.OptionInit()

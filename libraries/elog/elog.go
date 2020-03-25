@@ -4,6 +4,7 @@ import (
 	"gpi/libraries/efile"
 	"gpi/libraries/wmail"
 	"encoding/json"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"os"
@@ -26,8 +27,8 @@ type Elog struct {
 /**
  * 获取当前文件信息
  */
-func GetFileInfo() Elog {
-	pc, file, line, ok := runtime.Caller(1)
+func GetFileInfo(skip int) Elog {
+	pc, file, line, ok := runtime.Caller(skip)
 	funcName := runtime.FuncForPC(pc).Name()
 	errorFile := Elog{}
 	if ok {
@@ -46,6 +47,11 @@ func fileName() string {
  */
 func New(errMsg string, elogStruct Elog) {
 	go err(errMsg, elogStruct)
+}
+
+func Newf(format string, errMsg ...interface{}) {
+	msg := fmt.Sprintf(format, errMsg)
+	New(msg, Elog{})
 }
 
 func ErrMail(errMsg string, elogStruct Elog) {

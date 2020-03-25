@@ -8,8 +8,9 @@ import (
 )
 
 const (
-	AppId = "xxxx"
+	AppId = "AppId"
 	IpFAT = "http://localhost"
+	IpUAT = "http://localhost"
 	IpPRO = "http://localhost"
 	NameSpacename = "application"
 	BackUpFile = "/etc/application.agollo"
@@ -21,6 +22,8 @@ func OptionInit() map[string]interface{} {
 	var Ip string
 	if strings.ToLower(env) == "pro" {
 		Ip = IpPRO
+	} else if strings.ToLower(env) == "uat" {
+		Ip = IpUAT
 	}else{
 		Ip = IpFAT
 	}

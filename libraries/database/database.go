@@ -20,7 +20,6 @@ func init() {
 		EngineGroup[key] = connect(key)
 	}
 	fmt.Println("Engine Group:")
-	fmt.Println(EngineGroup)
 }
 
 func GetDB(key string) *xorm.Engine {
@@ -35,27 +34,27 @@ func GetDB(key string) *xorm.Engine {
 
 //连接数据库--单例模式
 func connect(key string) *xorm.Engine {
-	var err error
-	confMap := config.MysqlConfMap
-	if err != nil {
-		fmt.Println("connect db "+key+" Error: ", err.Error())
-	}
-	addrStr := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s",
-		confMap[key].User,
-		confMap[key].Passwd,
-		confMap[key].Host,
-		confMap[key].Port,
-		confMap[key].Name,
-		confMap[key].Charset,
-	)
-	fmt.Println("DB Addr : " + addrStr)
-	engine, err := xorm.NewEngine("mysql", addrStr)
-	engine.SetMaxOpenConns(confMap[key].OpenMax)
-	engine.SetMaxIdleConns(confMap[key].IdleMax)
-	if err != nil {
-		fmt.Println("Connect DB "+key+" Error :", err.Error())
-	} else {
-		fmt.Println("Connect DB "+key+" Success!")
-	}
-	return engine
+		var err error
+		confMap := config.MysqlConfMap
+		if err != nil {
+			fmt.Println("connect db "+key+" Error: ", err.Error())
+		}
+		addrStr := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s",
+			confMap[key].User,
+			confMap[key].Passwd,
+			confMap[key].Host,
+			confMap[key].Port,
+			confMap[key].Name,
+			confMap[key].Charset,
+		)
+		fmt.Println("DB Addr : " + addrStr)
+		engine, err := xorm.NewEngine("mysql", addrStr)
+		engine.SetMaxOpenConns(confMap[key].OpenMax)
+		engine.SetMaxIdleConns(confMap[key].IdleMax)
+		if err != nil {
+			fmt.Println("Connect DB "+key+" Error :", err.Error())
+		} else {
+			fmt.Println("Connect DB "+key+" Success!")
+		}
+		return engine
 }

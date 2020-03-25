@@ -1,28 +1,34 @@
 package exception
 
 import (
-	"fmt"
-	"github.com/gin-gonic/gin"
 	et "gpi/entities"
+	"gpi/libraries/efile"
+	"gpi/libraries/elog"
+	"gpi/libraries/wmail"
+	"encoding/json"
+	"github.com/gin-gonic/gin"
 	"net/http"
-	"time"
+	"os"
 )
 
 func Recover() gin.HandlerFunc{
 	return func(c *gin.Context) {
 		defer func() {
 			if err := recover(); err != nil {
+				errStruct := elog.GetAllInfo(c, elog.GetFileInfo(3))
+				errByte, _ := json.Marshal(err)
+				errMsg := string(errByte)
+				errStruct.ErrMsg = errMsg
+				//写入文件
 				go func() {
-					//mailToSli := config.Conf.GetStringSlice("errReport.mailto")
-					msgStr := fmt.Sprintf("请求url: %s \n", c.Request.RequestURI)
-					msgStr += fmt.Sprintf("请求IP: %s \n", c.ClientIP())
-					msgStr += fmt.Sprintf("请求Header: %s \n", c.Request.Header)
-					msgStr += fmt.Sprintf("请求时间: %s \n", time.Now().Format("2006-01-02 15:04:05"))
-					msgStr += fmt.Sprintf("错误信息: %s \n", err)
-					fmt.Println(msgStr)
-					//wmail.SendMail(mailToSli, config.Conf.GetString("errReport.subject"), msgStr)
+					fileName := efile.LogFileName("painc")
+					//写入log文件
+					_ = efile.WriteFile(fileName, errStruct, os.O_CREATE|os.O_APPEND|os.O_RDWR, 0755)
+					//发送邮件
+					wmail.SendErrMail(errStruct)
 				}()
-				c.JSON(http.StatusOK, et.ApiResonse{et.EntitySystemError, et.GetStatusMsg(et.EntitySystemError), gin.H{}})
+				//页面输出
+				c.JSON(http.StatusOK, et.ApiResonse{et.EntityPanic, et.GetStatusMsg(et.EntityPanic), errStruct})
 				c.Abort()
 			}
 		}()

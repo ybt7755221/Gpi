@@ -11,6 +11,6 @@ type GinUsers struct {
 	Password   string    `json:"password" xorm:"not null default '' comment('密码') CHAR(34)"`
 	Mobile     string    `json:"mobile" xorm:"not null default '' comment('手机号') unique CHAR(20)"`
 	Email      string    `json:"email" xorm:"not null default 'example@example.com' comment('邮箱') VARCHAR(128)"`
-	CreateTime time.Time `json:"create_time" xorm:"not null comment('创建时间') DATETIME"`
-	UpdateTime time.Time `json:"update_time" xorm:"not null comment('更新时间') DATETIME"`
+	CreateTime time.Time `json:"create_time" xorm:"created"`
+	UpdateTime time.Time `json:"update_time" xorm:"updated"`
 }

@@ -1,5 +1,11 @@
 package config
 
+import (
+	"fmt"
+	"os"
+	"strings"
+)
+
 type EmailConf struct {
 	Host 	string
 	Port 	int
@@ -12,12 +18,18 @@ type EmailConf struct {
 var EmailConfStruct EmailConf
 
 func init () {
+	var topic string
+	if strings.ToLower(os.Getenv("ACTIVE")) == "pro" {
+		topic = "正式"
+	}else{
+		topic = "测试"
+	}
 	EmailConfStruct = EmailConf{
-		Host 	: GetApolloString("MAIL_HOST","smtp.163.com"),
-		Port 	: GetApolloInt("MAIL_PORT",25),
-		User 	: GetApolloString("MAIL_USER","burt_yu@example.com"),
-		Passwd	: GetApolloString("MAIL_PASS","xxxxxxxxxx"),
-		To		: GetApolloString("MAIL_SEND",""),
-		ErrTopic : "【Gpi系统】错误",
+		Host 	 : GetApolloString("MAIL_ALERT_HOST",""),
+		Port 	 : GetApolloInt("MAIL_ALERT_PORT_SSL",0),
+		User 	 : GetApolloString("MAIL_ALERT_USER",""),
+		Passwd	 : GetApolloString("MAIL_ALERT_PASS",""),
+		To		 : GetApolloString("MAIL_ALERT_SEND",""),
+		ErrTopic : fmt.Sprintf("【GPI系统 | %s】错误", topic),
 	}
 }

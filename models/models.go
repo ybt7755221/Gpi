@@ -2,6 +2,6 @@ package models
 
 import "gpi/config"
 
-const (
+const(
 	Gin = config.Gin
 )

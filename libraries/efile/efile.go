@@ -16,7 +16,7 @@ func FileName(dirname string, fileName string, ext string) string {
 //生成log文件路径
 func LogFileName(prefix string) string {
 	fileName := config.AppName + "_" + prefix + "_" + time.Now().Format("2006-01-02") + ".log"
-	return filepath.Join(config.LogPath, config.AppName, fileName)
+	return filepath.Join(config.LogPath, fileName)
 }
 //写入文件
 func WriteFile(fileDir string, data interface{}, op int, mode os.FileMode) error {

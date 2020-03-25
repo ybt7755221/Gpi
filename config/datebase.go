@@ -12,23 +12,23 @@ type MysqlConf struct {
 }
 
 const(
-	Gin = "gin"
+	Gin = "Gin"
 )
 
 var MysqlConfMap map[string]MysqlConf
 
 func init() {
-	//读库操作
+	//库操作
 	msqConfMap := map[string]MysqlConf{
 		Gin : {
-			Host : GetApolloString("GIN_HOST", "127.0.0.1"),
-			Port : GetApolloString("GIN_PORT", "3306"),
-			Name : GetApolloString("GIN_NAME", "gin"),
-			User : GetApolloString("GIN_USER", "GinUser"),
-			Passwd : GetApolloString("GIN_PASSWD", "userGin"),
+			Host : GetApolloString("DB_HOST", "127.0.0.1"),
+			Port : GetApolloString("DB_PORT", "3306"),
+			Name : GetApolloString("DB_NAME", "gin"),
+			User : GetApolloString("DB_USER", "GinUser"),
+			Passwd : GetApolloString("DB_PASS", "userGin"),
 			Charset: "utf8",
-			OpenMax: GetApolloInt("MYSQL_MAX_OPEN_CONN", 150),
-			IdleMax: GetApolloInt("MYSQL_MAX_IDEL_CONN", 80),
+			OpenMax: GetApolloInt("MYSQL_MAX_OPEN_CONN", 100),
+			IdleMax: GetApolloInt("MYSQL_MAX_IDEL_CONN", 60),
 		},
  	}
 	MysqlConfMap = msqConfMap

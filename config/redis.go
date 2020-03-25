@@ -20,11 +20,11 @@ func init()  {
 		IdleTimeout:600,
 	}
 	RedisConfMap["cache"] = RedisENV{
-		Host:GetApolloString("REDIS_CACHE_SERVER", "127.0.0.1"),
-		Port:GetApolloString("REDIS_CACHE_PORT","6379"),
+		Host:GetApolloString("REDIS_SERVER", "127.0.0.1"),
+		Port:GetApolloString("REDIS_PORT","6379"),
 	}
 	RedisConfMap["db"] = RedisENV{
-		Host:GetApolloString("REIDS_DB_SERVER","127.0.0.1"),
+		Host:GetApolloString("SREDIS_DB_SERVER","127.0.0.1"),
 		Port:GetApolloString("REDIS_DB_PORT","6379"),
 	}
 }

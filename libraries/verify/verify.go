@@ -18,7 +18,7 @@ func GenerateToken(c *gin.Context) (string, string) {
 	}else{
 		rawStr = getParams(c.Request.PostForm)
 	}
-	rawStr = fmt.Sprintf("%s&%s", rawStr, config.Secret)
+	rawStr = fmt.Sprintf("%s&%s", rawStr, config.GetApolloString(config.Secret, ""))
 	return rawStr, GenerateMD5(rawStr, 32)
 }
 
