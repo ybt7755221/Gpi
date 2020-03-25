@@ -32,11 +32,7 @@
     go mod tidy
     go mod download
     go run main.go
-&nbsp;&nbsp;&nbsp;&nbsp;or 编译后运行编译文件：
 
-    go build
-    ./main
-    
 ##### 修改apollo配置
     //如果要使用apollo，修改配置
     const (
