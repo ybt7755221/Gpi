@@ -34,6 +34,7 @@
     go run main.go
 
 ##### 修改apollo配置
+
     //如果要使用apollo，修改配置
     const (
       	AppId = ""  //apollo app id
@@ -65,7 +66,8 @@ Windows需要下载 [gtool](https://github.com/ybt7755221/gtool) 自己编译exe
 &nbsp;&nbsp;&nbsp;&nbsp;环境变量
     
     ENVIRONMENT = fat   //判断apollo是测试还是正式
-&nbsp;&nbsp;&nbsp;&nbsp;如需要判断项目优先使用：   
+    
+&nbsp;&nbsp;&nbsp;&nbsp;如需要判断项目优先使用：
     
     os.Getenv("ACTIVE") //判断docker环境是正式测试
 

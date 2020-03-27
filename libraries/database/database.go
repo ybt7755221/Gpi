@@ -39,7 +39,7 @@ func connect(key string) *xorm.Engine {
 		if err != nil {
 			fmt.Println("connect db "+key+" Error: ", err.Error())
 		}
-		addrStr := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s",
+		addrStr := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s&loc=Local",
 			confMap[key].User,
 			confMap[key].Passwd,
 			confMap[key].Host,

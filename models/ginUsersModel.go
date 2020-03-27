@@ -59,8 +59,12 @@ func (u *GinUsersModel) GetById(id int) (*GinUsers, error) {
 }
 //插入
 func (u *GinUsersModel) Insert(ginUsers *GinUsers) (err error) {
+	fmt.Println(ginUsers)
 	dbConn := DB.GetDB(Gin)
 	affected, err := dbConn.Insert(ginUsers)
+	if err != nil {
+		return err
+	}
 	defer dbConn.Close()
 	if affected < 1 {
 		err = errors.New("插入影响行数: 0" )

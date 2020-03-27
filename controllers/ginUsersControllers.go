@@ -1,9 +1,9 @@
 package controllers
 
 import (
+	"github.com/gin-gonic/gin"
 	et "gpi/entities"
 	"gpi/service"
-	"github.com/gin-gonic/gin"
 	"strconv"
 )
 type GinUsersController struct {
