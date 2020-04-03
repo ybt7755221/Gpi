@@ -18,3 +18,13 @@ func TestBeanUtil(t *testing.T) {
 	BeanUtil(usersDao, users)
 	t.Logf("usersDao : %v", usersDao)
 }
+
+func TestFirstToLower(t *testing.T) {
+	s := FirstToLower("Hello World")
+	t.Log(s)
+}
+
+func TestFirstToUpper(t *testing.T) {
+	s := FirstToUpper("helloWorld")
+	t.Log(s)
+}

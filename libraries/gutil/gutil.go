@@ -56,3 +56,13 @@ func BeanUtil(out interface{}, in interface{}) {
 		}
 	}
 }
+
+//首字母小写
+func FirstToLower(s string) string {
+	return strings.ToLower(s[0:1]) + s[1:]
+}
+
+//首字母大写
+func FirstToUpper(s string) string {
+	return strings.ToUpper(s[0:1]) + s[1:]
+}
