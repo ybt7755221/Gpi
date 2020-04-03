@@ -2,13 +2,17 @@ package controllers
 
 import (
 	"github.com/gin-gonic/gin"
+	"gpi/dao"
 	et "gpi/entities"
+	"gpi/libraries/gutil"
 	"gpi/service"
 	"strconv"
 )
+
 type GinUsersController struct {
 	serv *service.GinUsersService
 }
+
 // @Tags users表操作
 // @Summary 【GetAll】根据条件获取信息
 // @Description 根据条件获取信息
@@ -32,6 +36,7 @@ func (c *GinUsersController) Find(ctx *gin.Context) {
 	}
 	resSuccess(ctx, ginUsersList)
 }
+
 // @Tags users表操作
 // @Summary 【GetOne】根据id获取信息
 // @Description 根据id获取信息
@@ -45,10 +50,13 @@ func (c *GinUsersController) FindById(ctx *gin.Context) {
 	ginUsers, err := c.serv.FindById(id)
 	if err != nil {
 		resError(ctx, et.EntityFailure, err.Error())
-	}else{
-		resSuccess(ctx, ginUsers)
+	} else {
+		ginUsersDao := new(dao.GinUsersDao)
+		gutil.BeanUtil(ginUsersDao, ginUsers)
+		resSuccess(ctx, ginUsersDao)
 	}
 }
+
 // @Tags users表操作
 // @Summary 【create】创建users信息
 // @Description 创建users信息
@@ -65,6 +73,7 @@ func (c *GinUsersController) Create(ctx *gin.Context) {
 	}
 	resSuccess(ctx, ginUsers)
 }
+
 // @Tags users表操作
 // @Summary 【update】根据id更新数据
 // @Description 根据id更新数据
@@ -73,19 +82,19 @@ func (c *GinUsersController) Create(ctx *gin.Context) {
 // @Param   id	body	string 	true	"主键更新依据此id"
 // @Success 200 {object} SgrResp
 // @Router /users/update-by-id [put]
-func (c * GinUsersController) UpdateById(ctx *gin.Context) {
+func (c *GinUsersController) UpdateById(ctx *gin.Context) {
 	id, _ := strconv.Atoi(ctx.PostForm("id"))
 	ginUsers := new(et.GinUsers)
 	getPostStructData(ctx, ginUsers)
 	has, err := c.serv.UpdateById(id, ginUsers)
 	if err != nil {
 		resError(ctx, et.EntityFailure, err.Error())
-	}else{
+	} else {
 		if has == 0 {
 			resError(ctx, et.EntityFailure, "影响行数0")
-		}else{
+		} else {
 			resSuccess(ctx, gin.H{
-				"update_count":has,
+				"update_count": has,
 			})
 		}
 	}
