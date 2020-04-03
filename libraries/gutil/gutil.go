@@ -26,11 +26,23 @@ func BeanUtil(out interface{}, in interface{}) {
 			var val interface{}
 			switch outType {
 			case "int":
-				val, _ = strconv.Atoi(inVal.String())
+				if inType == "string" {
+					val, _ = strconv.Atoi(inVal.String())
+				} else {
+					val = int(inVal.Int())
+				}
 			case "int32":
-				val, _ = strconv.ParseInt(inVal.String(), 10, 32)
+				if inType == "string" {
+					val, _ = strconv.ParseInt(inVal.String(), 10, 32)
+				} else {
+					val = int32(inVal.Int())
+				}
 			case "int64":
-				val, _ = strconv.ParseInt(inVal.String(), 10, 64)
+				if inType == "string" {
+					val, _ = strconv.ParseInt(inVal.String(), 10, 64)
+				} else {
+					val = int64(inVal.Int())
+				}
 			case "string":
 				if inType == "time.Time" {
 					val = inVal.Interface().(time.Time).Format("2006-01-02 15:04:05")
