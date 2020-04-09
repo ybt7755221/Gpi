@@ -35,6 +35,9 @@ func BenchmarkBeanUtil(b *testing.B) {
 	users.Id = 100
 	users.Mobile = "11111111111"
 	users.Fullname = "fullame"
+	users.Email = "asdfoas@dsfs.com"
+	users.Username = "sadfas"
+	users.Password = "sdfasdfds"
 	users.CreateTime = time.Now()
 	users.UpdateTime = time.Now()
 	b.ResetTimer()
@@ -49,6 +52,9 @@ func BenchmarkTwoJson(b *testing.B) {
 	users.Id = 100
 	users.Mobile = "11111111111"
 	users.Fullname = "fullame"
+	users.Email = "asdfoas@dsfs.com"
+	users.Username = "sadfas"
+	users.Password = "sdfasdfds"
 	users.CreateTime = time.Now()
 	users.UpdateTime = time.Now()
 	b.ResetTimer()

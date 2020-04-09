@@ -19,34 +19,34 @@ func BeanUtil(out interface{}, in interface{}) {
 		outFieldInfo := outType.Field(i)
 		inTypeInfo, ok := inType.FieldByName(outFieldInfo.Name)
 		if ok {
-			outType := outFieldInfo.Type.String()
-			inType := inTypeInfo.Type.String()
+			outTypeString := outFieldInfo.Type.String()
+			inTypeString := inTypeInfo.Type.String()
 			inVal := inValue.FieldByName(outFieldInfo.Name)
-			if outType == inType {
+			if outTypeString == inTypeString {
 				outValue.FieldByName(outFieldInfo.Name).Set(reflect.Value(inVal))
 			} else {
 				var val interface{}
-				switch outType {
+				switch outTypeString {
 				case "int":
-					if inType == "string" {
+					if inTypeString == "string" {
 						val, _ = strconv.Atoi(inVal.String())
 					} else {
 						val = int(inVal.Int())
 					}
 				case "int32":
-					if inType == "string" {
+					if inTypeString == "string" {
 						val, _ = strconv.ParseInt(inVal.String(), 10, 32)
 					} else {
 						val = int32(inVal.Int())
 					}
 				case "int64":
-					if inType == "string" {
+					if inTypeString == "string" {
 						val, _ = strconv.ParseInt(inVal.String(), 10, 64)
 					} else {
 						val = int64(inVal.Int())
 					}
 				case "string":
-					if inType == "time.Time" {
+					if inTypeString == "time.Time" {
 						val = inVal.Interface().(time.Time).Format("2006-01-02 15:04:05")
 					} else {
 						val = inVal.String()
@@ -72,7 +72,7 @@ func BeanUtil(out interface{}, in interface{}) {
 	}
 }
 
-//两次json实现结构体赋值结构体 -- 与BeanUtil对比基准测试使用
+//
 func TwoJson(out interface{}, in interface{}) {
 	byte, _ := json.Marshal(in)
 	json.Unmarshal(byte, out)
