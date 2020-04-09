@@ -7,16 +7,17 @@ import (
 
 type GinUsersService struct {
 }
+
 /**
  * 根据多条件查询数据
  */
-func (c *GinUsersService) Find(params map[string]interface{}) ([]et.GinUsers, error) {
+func (c *GinUsersService) Find(conditions *et.GinUsers, pagination *et.Pagination) (*et.GinUsersPageDao, error) {
 	ginUsersModel := models.GinUsersModel{}
-	ginUsersList, err := ginUsersModel.Find(params)
+	ginUsersPage, err := ginUsersModel.Find(conditions, pagination)
 	if err != nil {
 		return nil, err
 	}
-	return ginUsersList, nil
+	return ginUsersPage, nil
 }
 
 func (c *GinUsersService) FindById(id int) (*et.GinUsers, error) {

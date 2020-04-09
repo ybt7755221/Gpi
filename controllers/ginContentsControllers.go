@@ -1,14 +1,16 @@
 package controllers
 
 import (
+	"github.com/gin-gonic/gin"
 	et "gpi/entities"
 	"gpi/service"
-	"github.com/gin-gonic/gin"
 	"strconv"
 )
+
 type GinContentsController struct {
 	serv *service.GinContentsService
 }
+
 // @Tags contents表操作
 // @Summary 【GetAll】根据条件获取信息
 // @Description 根据条件获取信息
@@ -20,18 +22,20 @@ type GinContentsController struct {
 // @Success 200 {object} SgrResp
 // @Router /contents [get]
 func (c *GinContentsController) Find(ctx *gin.Context) {
-	fieldsArr := []string{}
-	//处理分页参数
-	params := getPagingParams(ctx)
-	//处理查询条件
-	params["conditions"] = getParams(ctx, fieldsArr, et.GinContents{})
-	ginContentsList, err := c.serv.Find(params)
+	ginContents := new(et.GinContents)
+	getParamsNew(ctx, ginContents)
+	pagination := new(et.Pagination)
+	pagination.PageNum, _ = strconv.Atoi(ctx.Query("page_num"))
+	pagination.PageSize, _ = strconv.Atoi(ctx.Query("page_size"))
+	pagination.SortStr = ctx.Query("sort")
+	ginContentsList, err := c.serv.Find(ginContents, pagination)
 	if err != nil {
 		resError(ctx, et.EntityFailure, err.Error())
 		return
 	}
 	resSuccess(ctx, ginContentsList)
 }
+
 // @Tags contents表操作
 // @Summary 【GetOne】根据id获取信息
 // @Description 根据id获取信息
@@ -45,10 +49,11 @@ func (c *GinContentsController) FindById(ctx *gin.Context) {
 	ginContents, err := c.serv.FindById(id)
 	if err != nil {
 		resError(ctx, et.EntityFailure, err.Error())
-	}else{
+	} else {
 		resSuccess(ctx, ginContents)
 	}
 }
+
 // @Tags contents表操作
 // @Summary 【create】创建contents信息
 // @Description 创建contents信息
@@ -65,6 +70,7 @@ func (c *GinContentsController) Create(ctx *gin.Context) {
 	}
 	resSuccess(ctx, ginContents)
 }
+
 // @Tags contents表操作
 // @Summary 【update】根据id更新数据
 // @Description 根据id更新数据
@@ -73,19 +79,19 @@ func (c *GinContentsController) Create(ctx *gin.Context) {
 // @Param   id	body	string 	true	"主键更新依据此id"
 // @Success 200 {object} SgrResp
 // @Router /contents/update-by-id [put]
-func (c * GinContentsController) UpdateById(ctx *gin.Context) {
+func (c *GinContentsController) UpdateById(ctx *gin.Context) {
 	id, _ := strconv.Atoi(ctx.PostForm("id"))
 	ginContents := new(et.GinContents)
 	getPostStructData(ctx, ginContents)
 	has, err := c.serv.UpdateById(id, ginContents)
 	if err != nil {
 		resError(ctx, et.EntityFailure, err.Error())
-	}else{
+	} else {
 		if has == 0 {
 			resError(ctx, et.EntityFailure, "影响行数0")
-		}else{
+		} else {
 			resSuccess(ctx, gin.H{
-				"update_count":has,
+				"update_count": has,
 			})
 		}
 	}

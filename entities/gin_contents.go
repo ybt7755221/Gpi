@@ -13,3 +13,10 @@ type GinContents struct {
 	PulishTime time.Time `json:"publish_time" xorm:"not null comment('上线时间') DATETIME"`
 	OpTime     time.Time `json:"op_time" xorm:"updated"`
 }
+
+type GinContentsPageDao struct {
+	List     []GinContents `json:"list"`
+	PageNum  int           `json:"page_num"`
+	PageSize int           `json:"page_size"`
+	Total    int64         `json:"total"`
+}

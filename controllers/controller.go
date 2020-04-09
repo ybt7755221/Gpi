@@ -1,13 +1,10 @@
 package controllers
 
 import (
-	"gpi/config"
-	. "gpi/entities"
-	"gpi/libraries/efile"
-	"gpi/libraries/mongo"
-	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
+	. "gpi/entities"
+	"gpi/libraries/efile"
 	"net/http"
 	"net/url"
 	"os"
@@ -16,27 +13,67 @@ import (
 	"strings"
 	"time"
 )
+
 // swagger: success response
 type SgrResp struct {
-	Code 	int			`json:"code" example:"1000"`
-	Msg		string		`json:"msg" example:"请求成功"`
-	Data 	interface{}	`json:"data"`
+	Code int         `json:"code" example:"1000"`
+	Msg  string      `json:"msg" example:"请求成功"`
+	Data interface{} `json:"data"`
 }
-
 
 type accesslog struct {
-	ReqUrl 		string 	`json:"request_url"`
-	ReqIp	  	string	`json:"request_ip"`
-	ReqTime 	string	`json:"request_time"`
-	ReqMethod 	string  `json:"request_method"`
-	ReqHeader 	http.Header	`json:"request_header"`
-	ReqBody		url.Values  `json:"request_body"`
-	ReqJson		interface{} `json:"request_body_json"`
-	ResCode 	int		`json:"response_code"`
-	ResData  	ApiResonse  `json:"response_data"`
+	ReqUrl    string      `json:"request_url"`
+	ReqIp     string      `json:"request_ip"`
+	ReqTime   string      `json:"request_time"`
+	ReqMethod string      `json:"request_method"`
+	ReqHeader http.Header `json:"request_header"`
+	ReqBody   url.Values  `json:"request_body"`
+	ReqJson   interface{} `json:"request_body_json"`
+	ResCode   int         `json:"response_code"`
+	ResData   ApiResonse  `json:"response_data"`
 }
 
-const PAGESIZE = 20
+func getParamsNew(c *gin.Context, dbEnt interface{}) {
+	//遍历entities中的json
+	var field string
+	gType := reflect.TypeOf(dbEnt).Elem()
+	gValue := reflect.ValueOf(dbEnt).Elem()
+	structNum := gValue.NumField()
+	for i := 0; i < structNum; i++ {
+		field = gType.Field(i).Tag.Get("json")
+		if c.Query(field) != "" {
+			switch gType.Field(i).Type.String() {
+			case "int":
+				val, _ := strconv.Atoi(c.Query(field))
+				gValue.Field(i).Set(reflect.ValueOf(val))
+			case "int32":
+				val, _ := strconv.ParseInt(c.Query(field), 10, 32)
+				gValue.Field(i).Set(reflect.ValueOf(val))
+			case "int64":
+				val, _ := strconv.ParseInt(c.Query(field), 10, 64)
+				gValue.Field(i).Set(reflect.ValueOf(val))
+			case "string":
+				gValue.Field(i).Set(reflect.ValueOf(c.Query(field)))
+			case "float32":
+				val, _ := strconv.ParseFloat(c.Query(field), 32)
+				gValue.Field(i).Set(reflect.ValueOf(val))
+			case "float64":
+				val, _ := strconv.ParseFloat(c.Query(field), 64)
+				gValue.Field(i).Set(reflect.ValueOf(val))
+			case "time.Time":
+				tmpValue := c.Query(field)
+				if len(tmpValue) == 10 && strings.Index(tmpValue, "-") == -1 {
+					intTm, _ := strconv.ParseInt(tmpValue, 10, 64)
+					tm := time.Unix(intTm, 0)
+					tmpValue = tm.Format("2006-01-02 15:04:05")
+				}
+				val, _ := time.Parse("2006-01-02 15:04:05", tmpValue)
+				gValue.Field(i).Set(reflect.ValueOf(val))
+			default:
+			}
+		}
+	}
+}
 
 func getParams(c *gin.Context, fields []string, dbEnt interface{}) map[string]string {
 	condition := make(map[string]string)
@@ -45,7 +82,7 @@ func getParams(c *gin.Context, fields []string, dbEnt interface{}) map[string]st
 		for _, val := range fields {
 			condition[val] = c.Query(val)
 		}
-	}else{
+	} else {
 		//如果field为空，遍历entities中的json
 		var field string
 		gType := reflect.TypeOf(dbEnt)
@@ -57,36 +94,6 @@ func getParams(c *gin.Context, fields []string, dbEnt interface{}) map[string]st
 		}
 	}
 	return condition
-}
-
-func getPagingParams(c *gin.Context) gin.H{
-	var offset = 0
-	pageNum, _ := strconv.Atoi(c.Query("page_num"))
-	if pageNum > 0 {
-		offset = (pageNum - 1) * PAGESIZE
-	}
-	limit, err := strconv.Atoi(c.Query("page_size"))
-	if err != nil || limit == 0 {
-		limit = PAGESIZE
-	}
-	sortStr := c.Query("sort")
-	sort := make(map[string]string, 0)
-	if len(sortStr) > 0 {
-		sort = getSort(sortStr)
-	}
-	pagingParams := gin.H{
-		"offset"  : offset,
-		"limit"   : limit,
-		"sort"    : sort,
-	}
-	return pagingParams
-}
-
-func getSort(sortStr string) (sort map[string]string) {
-	if err := json.Unmarshal([]byte(sortStr), &sort); err != nil {
-		return nil
-	}
-	return
 }
 
 func resJson(c *gin.Context, httpCode int, data ApiResonse) {
@@ -110,26 +117,28 @@ func resError(c *gin.Context, code int, msg string) {
 	dateStruct := ApiResonse{code, msg, gin.H{}}
 	resJson(c, http.StatusOK, dateStruct)
 }
+
 /**
  * 字符格式转时间
  * "2006-01-02 15:04:05"
  */
-func string2Time(tSter string) (theTime time.Time){
+func string2Time(tSter string) (theTime time.Time) {
 	loc, _ := time.LoadLocation("Local")
 	theTime, _ = time.ParseInLocation("2006-01-02", tSter, loc)
 	return
 }
+
 //请求日志
 func writeReqLog(c *gin.Context, code int, data ApiResonse, db bool) {
 	al := accesslog{}
-	al.ReqUrl   = c.Request.URL.Path
-	al.ReqBody 	= c.Request.PostForm
-	al.ReqTime 	= time.Now().Format("2006-01-02")
-	al.ReqIp 	= c.ClientIP()
-	al.ReqHeader= c.Request.Header
-	al.ReqMethod= c.Request.Method
-	al.ResCode 	= code
-	al.ResData  = data
+	al.ReqUrl = c.Request.URL.Path
+	al.ReqBody = c.Request.PostForm
+	al.ReqTime = time.Now().Format("2006-01-02")
+	al.ReqIp = c.ClientIP()
+	al.ReqHeader = c.Request.Header
+	al.ReqMethod = c.Request.Method
+	al.ResCode = code
+	al.ResData = data
 	if al.ReqBody == nil {
 		c.ShouldBindBodyWith(&al.ReqJson, binding.JSON)
 	}
@@ -143,8 +152,8 @@ func writeReqLog(c *gin.Context, code int, data ApiResonse, db bool) {
 
 //记录mongo
 func recordMongo(data accesslog) {
-	mgoName := "clue_api_request_log_" + time.Now().Format("200601")
-	mongo.Insert(config.Log, mgoName, data)
+	//mgoName := "clue_api_request_log_" + time.Now().Format("200601")
+	//mongo.Insert(config.Log, mgoName, data)
 }
 
 //获取update/create参数,通过反射，返回响应结构体
@@ -163,6 +172,7 @@ func getPostStructData(c *gin.Context, in interface{}) {
 	mapToStruct(in, postMap)
 	return
 }
+
 //map赋值struct
 func mapToStruct(ptr interface{}, fields map[string]interface{}) {
 	gValue := reflect.ValueOf(ptr).Elem()
@@ -176,7 +186,7 @@ func mapToStruct(ptr interface{}, fields map[string]interface{}) {
 		if value, ok := fields[jName]; ok {
 			if reflect.TypeOf(value) == gValue.Field(i).Type() {
 				gValue.FieldByName(fieldInfo.Name).Set(reflect.ValueOf(value))
-			}else{
+			} else {
 				if gValue.Field(i).Type().String() == "string" {
 					gValue.FieldByName(fieldInfo.Name).Set(reflect.ValueOf(value.(string)))
 				}

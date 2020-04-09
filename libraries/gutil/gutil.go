@@ -23,7 +23,7 @@ func BeanUtil(out interface{}, in interface{}) {
 			inTypeString := inTypeInfo.Type.String()
 			inVal := inValue.FieldByName(outFieldInfo.Name)
 			if outTypeString == inTypeString {
-				outValue.FieldByName(outFieldInfo.Name).Set(reflect.Value(inVal))
+				outValue.FieldByName(outFieldInfo.Name).Set(reflect.Value(inValue.FieldByName(outFieldInfo.Name)))
 			} else {
 				var val interface{}
 				switch outTypeString {
@@ -54,7 +54,7 @@ func BeanUtil(out interface{}, in interface{}) {
 				case "float32":
 					val, _ = strconv.ParseFloat(inVal.String(), 32)
 				case "float64":
-					val, _ = strconv.ParseFloat(inVal.String(), 32)
+					val, _ = strconv.ParseFloat(inVal.String(), 64)
 				case "time.Time":
 					tmpValue := inVal.String()
 					if len(tmpValue) == 10 && strings.Index(tmpValue, "-") == -1 {

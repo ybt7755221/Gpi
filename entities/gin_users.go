@@ -14,3 +14,10 @@ type GinUsers struct {
 	CreateTime time.Time `json:"create_time" xorm:"created"`
 	UpdateTime time.Time `json:"update_time" xorm:"updated"`
 }
+
+type GinUsersPageDao struct {
+	List     []GinUsers `json:"list"`
+	PageNum  int        `json:"page_num"`
+	PageSize int        `json:"page_size"`
+	Total    int64      `json:"total"`
+}

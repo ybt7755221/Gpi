@@ -24,12 +24,13 @@ type GinUsersController struct {
 // @Success 200 {object} SgrResp
 // @Router /users [get]
 func (c *GinUsersController) Find(ctx *gin.Context) {
-	fieldsArr := []string{}
-	//处理分页参数
-	params := getPagingParams(ctx)
-	//处理查询条件
-	params["conditions"] = getParams(ctx, fieldsArr, et.GinUsers{})
-	ginUsersList, err := c.serv.Find(params)
+	ginUsers := new(et.GinUsers)
+	getParamsNew(ctx, ginUsers)
+	pagination := new(et.Pagination)
+	pagination.PageNum, _ = strconv.Atoi(ctx.Query("page_num"))
+	pagination.PageSize, _ = strconv.Atoi(ctx.Query("page_size"))
+	pagination.SortStr = ctx.Query("sort")
+	ginUsersList, err := c.serv.Find(ginUsers, pagination)
 	if err != nil {
 		resError(ctx, et.EntityFailure, err.Error())
 		return

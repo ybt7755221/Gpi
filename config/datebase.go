@@ -12,7 +12,8 @@ type MysqlConf struct {
 }
 
 const (
-	Gin = "gin"
+	Gin         = "gin"
+	DefPageSize = 50
 )
 
 var MysqlConfMap map[string]MysqlConf
