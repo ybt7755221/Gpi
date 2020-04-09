@@ -28,3 +28,31 @@ func TestFirstToUpper(t *testing.T) {
 	s := FirstToUpper("helloWorld")
 	t.Log(s)
 }
+
+func BenchmarkBeanUtil(b *testing.B) {
+	usersDao := new(dao.GinUsersDao)
+	users := new(entities.GinUsers)
+	users.Id = 100
+	users.Mobile = "11111111111"
+	users.Fullname = "fullame"
+	users.CreateTime = time.Now()
+	users.UpdateTime = time.Now()
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		BeanUtil(usersDao, users)
+	}
+}
+
+func BenchmarkTwoJson(b *testing.B) {
+	usersDao := new(dao.GinUsersDao)
+	users := new(entities.GinUsers)
+	users.Id = 100
+	users.Mobile = "11111111111"
+	users.Fullname = "fullame"
+	users.CreateTime = time.Now()
+	users.UpdateTime = time.Now()
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		TwoJson(usersDao, users)
+	}
+}
