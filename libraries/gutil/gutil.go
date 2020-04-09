@@ -1,6 +1,7 @@
 package gutil
 
 import (
+	"encoding/json"
 	"reflect"
 	"strconv"
 	"strings"
@@ -69,6 +70,12 @@ func BeanUtil(out interface{}, in interface{}) {
 			}
 		}
 	}
+}
+
+//两次json实现结构体赋值结构体 -- 与BeanUtil对比基准测试使用
+func TwoJson(out interface{}, in interface{}) {
+	byte, _ := json.Marshal(in)
+	json.Unmarshal(byte, out)
 }
 
 //首字母小写
