@@ -1,23 +1,24 @@
 package mongo
 
 import (
-	"gpi/libraries/elog"
 	"fmt"
-	"gopkg.in/mgo.v2"
+	conf "gpi/config"
+	"gpi/libraries/elog"
 	"log"
 	"reflect"
 	"strconv"
 	"strings"
 	"sync"
 	"time"
-	conf "gpi/config"
+
+	"gopkg.in/mgo.v2"
 )
 
 var (
-	once sync.Once
-	GlobalMongo struct{
-			 //m_lock  sync.RWMutex
-			 Session map[string]*mgo.Session
+	once        sync.Once
+	GlobalMongo struct {
+		//m_lock  sync.RWMutex
+		Session map[string]*mgo.Session
 	}
 )
 
@@ -37,12 +38,12 @@ func init() {
 func getApolloConfig(db string) map[string]string {
 	dbConfig, ok := conf.GMConfig[db]
 	if !ok {
-		elog.New(fmt.Sprintf("mongo配置文件没有配置{%s}",db), elog.Elog{})
+		elog.New(fmt.Sprintf("mongo配置文件没有配置{%s}", db), elog.FileMsg{})
 	}
 	config := make(map[string]string)
 	getType := reflect.TypeOf(dbConfig)
 	getValue := reflect.ValueOf(dbConfig)
-	for i:=0; i<getType.NumField(); i++{
+	for i := 0; i < getType.NumField(); i++ {
 		field := getType.Field(i)
 		value := getValue.Field(i)
 		config[field.Name] = value.String()
@@ -50,52 +51,51 @@ func getApolloConfig(db string) map[string]string {
 	return config
 }
 
-func in_array (s string,arr []string) bool {
-	for _,v := range arr{
-		if v==s {
+func in_array(s string, arr []string) bool {
+	for _, v := range arr {
+		if v == s {
 			return true
 		}
 	}
 	return false
 }
 func GetMongoSession(db string) {
-	_,ok := GlobalMongo.Session[db]
+	_, ok := GlobalMongo.Session[db]
 	if !ok {
 		once.Do(func() {
 			//GlobalMongo.m_lock.Lock()
 			dbConfig := getApolloConfig(db)
-			host_port := fmt.Sprintf("%s:%s",dbConfig["host"],dbConfig["port"])
+			host_port := fmt.Sprintf("%s:%s", dbConfig["host"], dbConfig["port"])
 			arr_addrs := []string{host_port}
 			group := dbConfig["Group"]
-			if len(group)>0 {
-				arr_group := strings.Split(group,",")
-				for _,v := range arr_group {
-					arr_addrs = append(arr_addrs,v)
+			if len(group) > 0 {
+				arr_group := strings.Split(group, ",")
+				for _, v := range arr_group {
+					arr_addrs = append(arr_addrs, v)
 				}
 			}
-			timeout,_:=strconv.Atoi(dbConfig["Timeout"])
-			poollimit,_:=strconv.Atoi(dbConfig["PoolLimit"])
+			timeout, _ := strconv.Atoi(dbConfig["Timeout"])
+			poollimit, _ := strconv.Atoi(dbConfig["PoolLimit"])
 			direct_type := false
-			if dbConfig["Direct"] == "true"{
+			if dbConfig["Direct"] == "true" {
 				direct_type = true
 			}
 			dialInfo := &mgo.DialInfo{
-				Addrs:		arr_addrs,
-				Timeout:   	time.Duration(timeout)*time.Second,
-				Database:  	db,
-				Direct:		direct_type,
-				Username:  	dbConfig["user"],
-				Password:  	dbConfig["pass"],
-				PoolLimit: 	poollimit,
-				ReplicaSetName:dbConfig["ReplicaSetName"],
-
+				Addrs:          arr_addrs,
+				Timeout:        time.Duration(timeout) * time.Second,
+				Database:       db,
+				Direct:         direct_type,
+				Username:       dbConfig["user"],
+				Password:       dbConfig["pass"],
+				PoolLimit:      poollimit,
+				ReplicaSetName: dbConfig["ReplicaSetName"],
 			}
 			//fmt.Println(dialInfo)
 			//mgo.SetDebug(true)
 			//mgo.SetLogger(new(MongoLog)) // 设置日志.
 			s, err := mgo.DialWithInfo(dialInfo)
 			if err != nil {
-				elog.New("Create Session: "+err.Error()+"\n", elog.Elog{})
+				elog.New("Create Session: "+err.Error()+"\n", elog.FileMsg{})
 			}
 			GlobalMongo.Session[db] = s
 		})
@@ -117,13 +117,13 @@ func getDb(db string) (*mgo.Session, *mgo.Database) {
 	ms := GlobalMongo.Session[db].Copy()
 	return ms, ms.DB(db)
 }
-func EnsureIndexKey(db, collection string,args ...string) error{
+func EnsureIndexKey(db, collection string, args ...string) error {
 	ms, c := connect(db, collection)
 	defer ms.Close()
 	return c.EnsureIndexKey(args...)
 }
 
-func EnsureIndex(db, collection string,index mgo.Index) error{
+func EnsureIndex(db, collection string, index mgo.Index) error {
 	ms, c := connect(db, collection)
 	defer ms.Close()
 	return c.EnsureIndex(index)

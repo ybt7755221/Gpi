@@ -1,37 +1,45 @@
 package elog
 
 import (
-	"gpi/libraries/efile"
-	"gpi/libraries/wmail"
 	"encoding/json"
 	"fmt"
-	"github.com/gin-gonic/gin"
+	"gpi/libraries/efile"
+	"gpi/libraries/wmail"
 	"net/http"
 	"os"
 	"runtime"
 	"time"
+
+	"github.com/gin-gonic/gin"
 )
 
 type Elog struct {
-	ReqHost 	string  `json:"request_host"`
-	ReqUrl 		string 	`json:"request_url"`
-	ReqIp	  	string	`json:"request_ip"`
-	ReqTime 	string	`json:"request_time"`
-	ReqMethod 	string  `json:"request_method"`
-	ReqHeader 	http.Header	`json:"request_header"`
-	ErrMsg  	string	`json:"error_msg"`
-	File 		string	`json:"file"`
-	Line 		int		`json:"line"`
-	FuncName	string	`json:"function_name"`
+	ReqHost   string      `json:"request_host"`
+	ReqUrl    string      `json:"request_url"`
+	ReqIp     string      `json:"request_ip"`
+	ReqTime   string      `json:"request_time"`
+	ReqMethod string      `json:"request_method"`
+	ReqHeader http.Header `json:"request_header"`
+	ErrMsg    string      `json:"error_msg"`
+	FileMsg   []FileMsg   `json:"file_msg"`
 }
+
+type FileMsg struct {
+	FileLevel int    `json:"file_level"`
+	File      string `json:"file"`
+	Line      int    `json:"line"`
+	FuncName  string `json:"function_name"`
+}
+
 /**
  * 获取当前文件信息
  */
-func GetFileInfo(skip int) Elog {
+func GetFileInfo(skip int) FileMsg {
 	pc, file, line, ok := runtime.Caller(skip)
 	funcName := runtime.FuncForPC(pc).Name()
-	errorFile := Elog{}
+	errorFile := FileMsg{}
 	if ok {
+		errorFile.FileLevel = skip
 		errorFile.File = file
 		errorFile.Line = line
 		errorFile.FuncName = funcName
@@ -42,16 +50,19 @@ func GetFileInfo(skip int) Elog {
 func fileName() string {
 	return efile.LogFileName("errors")
 }
+
 /**
  * 创建错误日志，写入文件
  */
-func New(errMsg string, elogStruct Elog) {
+func New(errMsg string, errFile FileMsg) {
+	elogStruct := Elog{}
+	elogStruct.FileMsg[0] = errFile
 	go err(errMsg, elogStruct)
 }
 
 func Newf(format string, errMsg ...interface{}) {
-	msg := fmt.Sprintf(format, errMsg)
-	New(msg, Elog{})
+	msg := fmt.Sprintf(format, errMsg...)
+	New(msg, FileMsg{})
 }
 
 func ErrMail(errMsg string, elogStruct Elog) {
@@ -77,16 +88,21 @@ func err(errMsg string, elogStruct Elog) {
 	//写入log文件
 	_ = efile.WriteFile(fileName(), errByte, os.O_RDWR|os.O_APPEND|os.O_CREATE, 0755)
 }
+
 /**
  * 获取所有信息，http和file
  */
-func GetAllInfo(c *gin.Context, elogStruct Elog) Elog {
+func GetAllInfo(c *gin.Context) Elog {
 	errStruct := GetHttpInfo(c)
-	errStruct.File = elogStruct.File
-	errStruct.Line = elogStruct.Line
-	errStruct.FuncName = elogStruct.FuncName
+	errFileMsg := make([]FileMsg, 0)
+	for i := 0; i < 6; i++ {
+		fileInfo := GetFileInfo(i)
+		errFileMsg = append(errFileMsg, fileInfo)
+	}
+	errStruct.FileMsg = errFileMsg
 	return errStruct
 }
+
 /**
  * 获取网络信息
  */

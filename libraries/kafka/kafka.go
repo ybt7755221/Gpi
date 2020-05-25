@@ -1,23 +1,25 @@
 package kafka
 
 import (
-	"gpi/libraries/elog"
 	"errors"
 	"fmt"
-	"github.com/Shopify/sarama"
 	conf "gpi/config"
+	"gpi/libraries/elog"
+
+	"github.com/Shopify/sarama"
 )
 
 type Kafka struct {
-	Topic string
-	Key string
-	StrVal string
+	Topic   string
+	Key     string
+	StrVal  string
 	ByteVal []byte
 }
+
 //创建kafka连接
 func Connection() sarama.SyncProducer {
 	//获取kafka url
-	url := conf.GetApolloString(conf.KafkaUrl,"127.0.0.1")+":"+conf.GetApolloString(conf.KafKaProt, "9092")
+	url := conf.GetApolloString(conf.KafkaUrl, "127.0.0.1") + ":" + conf.GetApolloString(conf.KafKaProt, "9092")
 	// 新建一个arama配置实例
 	config := sarama.NewConfig()
 
@@ -38,6 +40,7 @@ func Connection() sarama.SyncProducer {
 	}
 	return client
 }
+
 //生产者
 func Producer(producer Kafka) error {
 	client := Connection()
@@ -53,15 +56,15 @@ func Producer(producer Kafka) error {
 	}
 	if len(producer.ByteVal) > 0 {
 		msg.Value = sarama.ByteEncoder(producer.ByteVal)
-	}else{
+	} else {
 		msg.Value = sarama.StringEncoder(producer.StrVal)
 	}
 	// 发送消息
 	pid, offset, err := client.SendMessage(msg)
 	if err != nil {
 		fmt.Println("send message failed,", err)
-		elog.New("send message failed,"+err.Error(), elog.Elog{})
-	}else{
+		elog.New("send message failed,"+err.Error(), elog.FileMsg{})
+	} else {
 		fmt.Printf("pid:%v offset:%v\n", pid, offset)
 		elog.Newf("pid:%v offset:%v\n", pid, offset)
 	}

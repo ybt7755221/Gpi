@@ -1,21 +1,22 @@
 package exception
 
 import (
+	"encoding/json"
 	et "gpi/entities"
 	"gpi/libraries/efile"
 	"gpi/libraries/elog"
 	"gpi/libraries/wmail"
-	"encoding/json"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"os"
+
+	"github.com/gin-gonic/gin"
 )
 
-func Recover() gin.HandlerFunc{
+func Recover() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		defer func() {
 			if err := recover(); err != nil {
-				errStruct := elog.GetAllInfo(c, elog.GetFileInfo(3))
+				errStruct := elog.GetAllInfo(c)
 				errByte, _ := json.Marshal(err)
 				errMsg := string(errByte)
 				errStruct.ErrMsg = errMsg
