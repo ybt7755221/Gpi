@@ -12,9 +12,6 @@ require (
 	github.com/go-redis/redis v6.15.7+incompatible
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/go-xorm/xorm v0.7.9
-	github.com/juju/errors v0.0.0-20190930114154-d42613fe1ab9
-	github.com/juju/loggo v0.0.0-20190526231331-6e530bcce5d8 // indirect
-	github.com/juju/testing v0.0.0-20191001232224-ce9dec17d28b // indirect
 	github.com/opentracing/opentracing-go v1.1.0
 	github.com/shima-park/agollo v1.1.10
 	github.com/swaggo/files v0.0.0-20190704085106-630677cd5c14
