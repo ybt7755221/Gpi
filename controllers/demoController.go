@@ -3,7 +3,6 @@ package controllers
 import (
 	"fmt"
 	et "gpi/entities"
-	"gpi/libraries/httpReq"
 	"gpi/libraries/mongo"
 	"gpi/libraries/redis"
 	"gpi/libraries/wmail"
@@ -17,18 +16,7 @@ type DemoController struct {
 }
 
 func (d *DemoController) GetConf(c *gin.Context) {
-	panic("test 11122333")
-	var Ireq httpReq.IRequest
-	var hreq httpReq.Request
-	Ireq = hreq
-	hreq.ContentType = httpReq.JSON
-	hreq.Timeout = 5 * time.Second
-	res, err := Ireq.Get("http://localhost:8080/createToken?ts=1573096339")
-	if err != nil {
-		resError(c, et.EntityFailure, err.Error())
-		return
-	}
-	resSuccess(c, res)
+	resSuccess(c, gin.H{})
 }
 
 func (d *DemoController) Mgo(c *gin.Context) {

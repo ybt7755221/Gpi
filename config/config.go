@@ -6,17 +6,17 @@ import (
 )
 
 const (
-	AppName 	  = "Gpi"
-	Secret 		  = "Dl*sCKW7C{SfYiPtYX*O5/71vG9&sm?2U"
-	HttpPort 	  = "9090"
-	Duration 	  = "TIMEOUT"
-	LogPath  	  = "/data/logs"
-	WechatUrl	  = "WECHAT"
-	WechattoUser  = "WECHAT_TOUSER"
-	WechatSecret  = "WECHAT_SECRET"
-	WechatAppkey  = "WECHAT_APPKEY"
-	KafkaUrl	  = "KFKURL"
-	KafKaProt	  = "KFKPORT"
+	AppName      = "Gpi"
+	Secret       = "Dl*sCKW7C{SfYiPtYX*O5/71vG9&sm?2U"
+	HttpPort     = "8080"
+	Duration     = "TIMEOUT"
+	LogPath      = "/data/logs"
+	WechatUrl    = "WECHAT"
+	WechattoUser = "WECHAT_TOUSER"
+	WechatSecret = "WECHAT_SECRET"
+	WechatAppkey = "WECHAT_APPKEY"
+	KafkaUrl     = "KFKURL"
+	KafKaProt    = "KFKPORT"
 )
 
 type JaegerConf struct {
