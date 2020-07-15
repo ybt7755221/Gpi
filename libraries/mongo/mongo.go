@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"gpi/config"
+	"log"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -29,6 +30,16 @@ func connect() {
 	}
 }
 
-func InsertOne(db string, table string, data bson.M) {
-	MgoClient.Database(db).Collection(table).InsertOne(context.Background(), data)
+func InsertOne(db string, table string, data bson.M) error {
+	_, err := MgoClient.Database(db).Collection(table).InsertOne(context.Background(), data)
+	return err
+}
+
+func FindOne(db string, table string, filter bson.M) (interface{}, error) {
+	var result interface{}
+	err := MgoClient.Database(db).Collection(table).FindOne(context.Background(), filter).Decode(&result)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return result, err
 }

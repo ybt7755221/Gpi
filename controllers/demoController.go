@@ -3,7 +3,7 @@ package controllers
 import (
 	"fmt"
 	et "gpi/entities"
-	"gpi/libraries/mongodb"
+	"gpi/libraries/mongo"
 	"gpi/libraries/redis"
 	"gpi/libraries/wmail"
 	"time"
@@ -20,14 +20,17 @@ func (d *DemoController) GetConf(c *gin.Context) {
 }
 
 func (d *DemoController) Mgo(c *gin.Context) {
-	db := "system_log"
-	table := "users_log"
-	mongodb.InsertOne(db, table, bson.M{
-		"name":     "asfasfd",
-		"age":      21,
-		"country":  "china",
-		"password": "1231234123",
-	})
+	// mongo.InsertOne("system_log", "users_log", bson.M{
+	// 	"name":     "saofjiasf",
+	// 	"age":      31,
+	// 	"country":  "china",
+	// 	"password": "asfas",
+	// })
+	res, err := mongo.FindOne("system_log", "users_log", bson.M{"name": "saofjiasf"})
+	if err != nil {
+		resError(c, et.EntityFailure, err.Error())
+	}
+	resSuccess(c, res)
 }
 
 func (d *DemoController) Email(c *gin.Context) {
