@@ -8,6 +8,8 @@ import (
 	"sort"
 	"strings"
 	"time"
+
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 type WechatReq struct {
@@ -23,9 +25,9 @@ func (w *WechatReq) wechatSN(data map[string]string) string {
 		keySli = append(keySli, key)
 	}
 	sort.Strings(keySli)
- 	for _, key := range keySli {
+	for _, key := range keySli {
 		str += "&" + key + "=" + data[key]
- 	}
+	}
 	str = str[1:] + config.GetApolloString(config.WechatSecret, "")
 	if !w.Undata {
 		str += time.Now().Format("2006-01-02")
@@ -39,9 +41,9 @@ func (w *WechatReq) SendWechat(data string) (map[string]interface{}, error) {
 		touser = w.ToUser
 	}
 	params := map[string]string{
-		"touser" : touser,
+		"touser":  touser,
 		"content": data,
-		"appkey" : config.GetApolloString(config.WechatAppkey, ""),
+		"appkey":  config.GetApolloString(config.WechatAppkey, ""),
 	}
 	sn := w.wechatSN(params)
 	params["sn"] = sn
@@ -60,12 +62,12 @@ func (w *WechatReq) SendWechat(data string) (map[string]interface{}, error) {
 	//记录mongo
 	go func() {
 		mgoName := "wechat_log_" + time.Now().Format("200601")
-		mongo.Insert(config.Log, mgoName, map[string]interface{}{
-			"url" : httpUrl,
-			"request_data" : urlValue,
-			"response_data" : res,
-			"from" : config.AppName,
-			"request_time" : time.Now().Format("2006-01-02 15:04:05"),
+		mongo.InsertOne(config.SYSTEMLOG, mgoName, bson.M{
+			"url":           httpUrl,
+			"request_data":  urlValue,
+			"response_data": res,
+			"from":          config.AppName,
+			"request_time":  time.Now().Format("2006-01-02 15:04:05"),
 		})
 	}()
 	return res, err

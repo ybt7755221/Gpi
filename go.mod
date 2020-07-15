@@ -19,6 +19,7 @@ require (
 	github.com/swaggo/swag v1.6.5
 	github.com/uber/jaeger-client-go v2.22.1+incompatible
 	github.com/uber/jaeger-lib v2.2.0+incompatible // indirect
+	go.mongodb.org/mongo-driver v1.3.5
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
 	gopkg.in/mgo.v2 v2.0.0-20190816093944-a6b53ec6cb22

@@ -3,13 +3,13 @@ package controllers
 import (
 	"fmt"
 	et "gpi/entities"
-	"gpi/libraries/mongo"
+	"gpi/libraries/mongodb"
 	"gpi/libraries/redis"
 	"gpi/libraries/wmail"
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"gopkg.in/mgo.v2/bson"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 type DemoController struct {
@@ -20,14 +20,14 @@ func (d *DemoController) GetConf(c *gin.Context) {
 }
 
 func (d *DemoController) Mgo(c *gin.Context) {
-	mongoName := "log1"
-	var res interface{}
-	err := mongo.FindOne("log", mongoName, bson.M{}, nil, &res)
-	if err != nil {
-		resError(c, et.EntityFailure, err.Error())
-	} else {
-		resSuccess(c, res)
-	}
+	db := "system_log"
+	table := "users_log"
+	mongodb.InsertOne(db, table, bson.M{
+		"name":     "asfasfd",
+		"age":      21,
+		"country":  "china",
+		"password": "1231234123",
+	})
 }
 
 func (d *DemoController) Email(c *gin.Context) {

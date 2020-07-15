@@ -63,6 +63,8 @@ github.com/go-redis/redis/internal/util
 # github.com/go-sql-driver/mysql v1.5.0
 ## explicit
 github.com/go-sql-driver/mysql
+# github.com/go-stack/stack v1.8.0
+github.com/go-stack/stack
 # github.com/go-xorm/xorm v0.7.9
 ## explicit
 github.com/go-xorm/xorm
@@ -144,6 +146,43 @@ github.com/uber/jaeger-client-go/utils
 github.com/uber/jaeger-lib/metrics
 # github.com/ugorji/go/codec v1.1.7
 github.com/ugorji/go/codec
+# github.com/xdg/scram v0.0.0-20180814205039-7eeb5667e42c
+github.com/xdg/scram
+# github.com/xdg/stringprep v1.0.0
+github.com/xdg/stringprep
+# go.mongodb.org/mongo-driver v1.3.5
+## explicit
+go.mongodb.org/mongo-driver/bson
+go.mongodb.org/mongo-driver/bson/bsoncodec
+go.mongodb.org/mongo-driver/bson/bsonoptions
+go.mongodb.org/mongo-driver/bson/bsonrw
+go.mongodb.org/mongo-driver/bson/bsontype
+go.mongodb.org/mongo-driver/bson/primitive
+go.mongodb.org/mongo-driver/event
+go.mongodb.org/mongo-driver/internal
+go.mongodb.org/mongo-driver/mongo
+go.mongodb.org/mongo-driver/mongo/options
+go.mongodb.org/mongo-driver/mongo/readconcern
+go.mongodb.org/mongo-driver/mongo/readpref
+go.mongodb.org/mongo-driver/mongo/writeconcern
+go.mongodb.org/mongo-driver/tag
+go.mongodb.org/mongo-driver/version
+go.mongodb.org/mongo-driver/x/bsonx
+go.mongodb.org/mongo-driver/x/bsonx/bsoncore
+go.mongodb.org/mongo-driver/x/mongo/driver
+go.mongodb.org/mongo-driver/x/mongo/driver/address
+go.mongodb.org/mongo-driver/x/mongo/driver/auth
+go.mongodb.org/mongo-driver/x/mongo/driver/auth/internal/gssapi
+go.mongodb.org/mongo-driver/x/mongo/driver/connstring
+go.mongodb.org/mongo-driver/x/mongo/driver/description
+go.mongodb.org/mongo-driver/x/mongo/driver/dns
+go.mongodb.org/mongo-driver/x/mongo/driver/mongocrypt
+go.mongodb.org/mongo-driver/x/mongo/driver/mongocrypt/options
+go.mongodb.org/mongo-driver/x/mongo/driver/operation
+go.mongodb.org/mongo-driver/x/mongo/driver/session
+go.mongodb.org/mongo-driver/x/mongo/driver/topology
+go.mongodb.org/mongo-driver/x/mongo/driver/uuid
+go.mongodb.org/mongo-driver/x/mongo/driver/wiremessage
 # go.uber.org/atomic v1.4.0
 go.uber.org/atomic
 # golang.org/x/crypto v0.0.0-20200204104054-c9f3fb736b72
@@ -155,9 +194,11 @@ golang.org/x/net/internal/socks
 golang.org/x/net/proxy
 golang.org/x/net/webdav
 golang.org/x/net/webdav/internal/xml
+# golang.org/x/sync v0.0.0-20190423024810-112230192c58
+golang.org/x/sync/semaphore
 # golang.org/x/sys v0.0.0-20200116001909-b77594299b42
 golang.org/x/sys/unix
-# golang.org/x/text v0.3.2
+# golang.org/x/text v0.3.3
 golang.org/x/text/secure/bidirule
 golang.org/x/text/transform
 golang.org/x/text/unicode/bidi

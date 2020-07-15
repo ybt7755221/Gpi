@@ -1,35 +1,49 @@
 package config
 
-const(
-	Log = "sys_log"
+const (
+	Log       = "sys_log"
+	SYSTEMLOG = "system_log"
 )
 
 type MgoStruct struct {
-	name 					string
-	host 					string
-	port 					string
-	user 					string
-	pass 					string
-	PoolLimit 				string
-	Timeout 				string
-	Direct 					string
-	ReplicaSetName 			string
-	Group 					string
+	Name           string
+	Host           string
+	Port           string
+	User           string
+	Pass           string
+	PoolLimit      string
+	Timeout        string
+	Direct         string
+	ReplicaSetName string
+	Group          string
 }
+
 var GMConfig map[string]MgoStruct
 
 func init() {
-	GMConfig = make(map[string]MgoStruct,0)
+	GMConfig = make(map[string]MgoStruct, 0)
 	GMConfig[Log] = MgoStruct{
-		name:        GetApolloString("MONGO_LOG_NAME", ""),
-		host:        GetApolloString("MONGO_LOG_HOST", ""),
-		port:        GetApolloString("MONGO_LOG_PORT", ""),
-		user:        GetApolloString("MONGO_LOG_USER", ""),
-		pass:        GetApolloString("MONGO_LOG_PASS", ""),
-		PoolLimit :  GetApolloString("MONGO_POOL_LIMIT", ""),
-		Timeout:     GetApolloString("MONGO_TIMEOUT", ""),
-		Direct:      GetApolloString("MONGO_DIRECT", ""),
+		Name:           GetApolloString("MONGO_LOG_NAME", ""),
+		Host:           GetApolloString("MONGO_LOG_HOST", ""),
+		Port:           GetApolloString("MONGO_LOG_PORT", ""),
+		User:           GetApolloString("MONGO_LOG_USER", ""),
+		Pass:           GetApolloString("MONGO_LOG_PASS", ""),
+		PoolLimit:      GetApolloString("MONGO_POOL_LIMIT", ""),
+		Timeout:        GetApolloString("MONGO_TIMEOUT", ""),
+		Direct:         GetApolloString("MONGO_DIRECT", ""),
 		ReplicaSetName: GetApolloString("MONGO_LOG_REPLICASET", ""),
-		Group         :  GetApolloString("MONGO_LOG_HOST_PORT_GROUP", ""),
+		Group:          GetApolloString("MONGO_LOG_HOST_PORT_GROUP", ""),
+	}
+	GMConfig[SYSTEMLOG] = MgoStruct{
+		Name:           GetApolloString("MONGO_LOG_NAME", SYSTEMLOG),
+		Host:           GetApolloString("MONGO_LOG_HOST", "localhost"),
+		Port:           GetApolloString("MONGO_LOG_PORT", "27017"),
+		User:           GetApolloString("MONGO_LOG_USER", "root"),
+		Pass:           GetApolloString("MONGO_LOG_PASS", "123456"),
+		PoolLimit:      GetApolloString("MONGO_POOL_LIMIT", ""),
+		Timeout:        GetApolloString("MONGO_TIMEOUT", ""),
+		Direct:         GetApolloString("MONGO_DIRECT", ""),
+		ReplicaSetName: GetApolloString("MONGO_LOG_REPLICASET", ""),
+		Group:          GetApolloString("MONGO_LOG_HOST_PORT_GROUP", ""),
 	}
 }
