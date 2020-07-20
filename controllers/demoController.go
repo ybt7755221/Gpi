@@ -26,11 +26,24 @@ func (d *DemoController) Mgo(c *gin.Context) {
 	// 	"country":  "china",
 	// 	"password": "asfas",
 	// })
-	res, err := mongo.FindOne("system_log", "users_log", bson.M{"name": "saofjiasf"})
+	// condition := mongo.MgoCondition{
+	// 	Filter:     nil,
+	// 	PageNum:    2,
+	// 	PagePerNum: 2,
+	// }
+	// fmt.Println(condition)
+	// res, err := mongo.Find("system_log", "users_log", condition)
+	filter := bson.D{{"name", "burtyu"}}
+	update := bson.D{
+		{"$set", bson.D{
+			{"age", 18},
+		}},
+	}
+	num, err := mongo.UpdateOne("system_log", "users_log", filter, update)
 	if err != nil {
 		resError(c, et.EntityFailure, err.Error())
 	}
-	resSuccess(c, res)
+	resSuccess(c, gin.H{"num": num})
 }
 
 func (d *DemoController) Email(c *gin.Context) {
