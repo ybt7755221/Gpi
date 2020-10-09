@@ -8,6 +8,13 @@ import (
 type WrUsersService struct {
 }
 /**
+ * 根据多条件查询数据-单条
+ */
+func (c *WrUsersService) FindOne(conditions *et.WrUsers) (*et.WrUsers, error) {
+	wrUsersModel := models.WrUsersModel{}
+	return wrUsersModel.FindOne(conditions)
+}
+/**
  * 根据多条件查询数据
  */
 func (c *WrUsersService) Find(conditions *et.WrUsers, pagination *et.Pagination) ([]et.WrUsers, error) {
@@ -18,8 +25,9 @@ func (c *WrUsersService) Find(conditions *et.WrUsers, pagination *et.Pagination)
 	}
 	return wrUsersPage, nil
 }
+
 /**
- * 根据多条件查询数据
+ * 根据多条件查询数据-分页
  */
 func (c *WrUsersService) FindPaging(conditions *et.WrUsers, pagination *et.Pagination) (*et.WrUsersPageDao, error) {
 	wrUsersModel := models.WrUsersModel{}

@@ -9,16 +9,33 @@ import (
 type WrUsersController struct {
 	serv *service.WrUsersService
 }
-// @Tags wrUsers表操作
+// @Tags user表操作
+// @Summary 【GetOne】根据条件获取单条数据
+// @Description 根据条件获取信息
+// @Accept html
+// @Produce json
+// @Success 200 {object} SgrResp
+// @Router /user/one [get]
+func (c *WrUsersController) FindOne(ctx *gin.Context) {
+	wrUsers := new(et.WrUsers)
+	getParamsNew(ctx, wrUsers)
+	res, err := c.serv.FindOne(wrUsers)
+	if err != nil {
+		resError(ctx, et.EntityFailure, err.Error())
+	}else{
+		resSuccess(ctx, res)
+	}
+}
+// @Tags user表操作
 // @Summary 【GetAll】根据条件获取信息
 // @Description 根据条件获取信息
 // @Accept html
 // @Produce json
 // @Param	page_num	query 	int		false	"页数，默认1"
 // @Param	page_size	query 	int		false	"每夜条数，默认50"
-// @Param	sort		query 	string	false	"排序。id desc, time asc"
+// @Param	sort		query 	string	false	"排序 {\"id\":\"desc\"}"
 // @Success 200 {object} SgrResp
-// @Router /wrUsers [get]
+// @Router /user [get]
 func (c *WrUsersController) Find(ctx *gin.Context) {
 	wrUsers := new(et.WrUsers)
 	getParamsNew(ctx, wrUsers)
@@ -33,17 +50,16 @@ func (c *WrUsersController) Find(ctx *gin.Context) {
 	}
 	resSuccess(ctx, wrUsersList)
 }
-
-// @Tags wrUsers表操作
+// @Tags user表操作
 // @Summary 【GetAll】根据条件获取信息
 // @Description 根据条件获取信息
 // @Accept html
 // @Produce json
 // @Param	page_num	query 	int		false	"页数，默认1"
 // @Param	page_size	query 	int		false	"每夜条数，默认50"
-// @Param	sort		query 	string	false	"排序。id desc, time asc"
+// @Param	sort		query 	string	false	"排序 {\"id\":\"desc\"}"
 // @Success 200 {object} SgrResp
-// @Router /wrUsers [get]
+// @Router /user/page [get]
 func (c *WrUsersController) FindPaging(ctx *gin.Context) {
 	wrUsers := new(et.WrUsers)
 	getParamsNew(ctx, wrUsers)
@@ -58,14 +74,14 @@ func (c *WrUsersController) FindPaging(ctx *gin.Context) {
 	}
 	resSuccess(ctx, wrUsersList)
 }
-// @Tags wrUsers表操作
+// @Tags user表操作
 // @Summary 【GetOne】根据id获取信息
 // @Description 根据id获取信息
 // @Accept html
 // @Produce json
 // @Param   id		path	string 	false	"主键id"
 // @Success 200 {object} SgrResp
-// @Router /wrUsers/{id} [get]
+// @Router /user/find-by-id/{id} [get]
 func (c *WrUsersController) FindById(ctx *gin.Context) {
 	id, _ := strconv.Atoi(ctx.Param("id"))
 	wrUsers, err := c.serv.FindById(id)
@@ -75,13 +91,13 @@ func (c *WrUsersController) FindById(ctx *gin.Context) {
 		resSuccess(ctx, wrUsers)
 	}
 }
-// @Tags wrUsers表操作
-// @Summary 【create】创建wrUsers信息
-// @Description 创建wrUsers信息
+// @Tags user表操作
+// @Summary 【create】创建user信息
+// @Description 创建user信息
 // @Accept x-www-form-urlencoded
 // @Produce json
 // @Success 200 {object} SgrResp
-// @Router /wrUsers [post]
+// @Router /user [post]
 func (c *WrUsersController) Create(ctx *gin.Context) {
 	wrUsers := new(et.WrUsers)
 	getPostStructData(ctx, wrUsers)
@@ -91,14 +107,14 @@ func (c *WrUsersController) Create(ctx *gin.Context) {
 	}
 	resSuccess(ctx, wrUsers)
 }
-// @Tags wrUsers表操作
+// @Tags user表操作
 // @Summary 【update】根据id更新数据
 // @Description 根据id更新数据
 // @Accept x-www-form-urlencoded
 // @Produce json
 // @Param   id	body	string 	true	"主键更新依据此id"
 // @Success 200 {object} SgrResp
-// @Router /wrUsers/update-by-id [put]
+// @Router /user/update-by-id [put]
 func (c * WrUsersController) UpdateById(ctx *gin.Context) {
 	id, _ := strconv.Atoi(ctx.PostForm("id"))
 	wrUsers := new(et.WrUsers)

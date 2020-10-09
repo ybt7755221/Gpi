@@ -11,6 +11,17 @@ import (
 type WrUsersModel struct {
 }
 
+//查找单条数据
+func(u *WrUsersModel) FindOne(conditions *WrUsers) (*WrUsers, error) {
+	dbConn := DB.GetDB(Gin)
+	defer dbConn.Close()
+	has, err := dbConn.Get(conditions)
+	if has {
+		return conditions, err
+	}else{
+		return nil, err
+	}
+}
 //查找多条数据
 func(u *WrUsersModel) Find(conditions *WrUsers, pagination *Pagination )  ([]WrUsers, error) {
 	dbConn := DB.GetDB(Gin)
@@ -39,7 +50,8 @@ func(u *WrUsersModel) Find(conditions *WrUsers, pagination *Pagination )  ([]WrU
 	err := dbC.Find(&wrUsersPage.List, conditions)
 	return wrUsersPage.List, err
 }
-//查找多条数据
+
+//查找多条数据-分页
 func(u *WrUsersModel) FindPaging(conditions *WrUsers, pagination *Pagination )  (*WrUsersPageDao, error) {
 	dbConn := DB.GetDB(Gin)
 	defer dbConn.Close()
