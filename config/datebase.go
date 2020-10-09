@@ -13,6 +13,7 @@ type MysqlConf struct {
 
 const (
 	Gin         = "gin"
+	Ali         = "huawei_enjoy"
 	DefPageSize = 50
 )
 
@@ -23,12 +24,22 @@ func init() {
 	msqConfMap := map[string]MysqlConf{
 		Gin: {
 			Host:    GetApolloString("DB_HOST", "127.0.0.1"),
-			Port:    GetApolloString("DB_PORT", "3306"),
-			Name:    GetApolloString("DB_NAME", "gin"),
-			User:    GetApolloString("DB_USER", "GinUser"),
-			Passwd:  GetApolloString("DB_PASS", "userGin"),
+			Port:    GetApolloString("DB_PORT", "3357"),
+			Name:    GetApolloString("DB_NAME", "work_reports"),
+			User:    GetApolloString("DB_USER", "root"),
+			Passwd:  GetApolloString("DB_PASS", "root"),
 			Charset: "utf8",
 			OpenMax: GetApolloInt("MYSQL_MAX_OPEN_CONN", 100),
+			IdleMax: GetApolloInt("MYSQL_MAX_IDEL_CONN", 60),
+		},
+		Ali: {
+			Host:    GetApolloString("DB_HOST", "z106zotuafd4e4kk7try-rw4rm.rwlb.rds.aliyuncs.com"),
+			Port:    GetApolloString("DB_PORT", "3306"),
+			Name:    GetApolloString("DB_NAME", "huawei_enjoy"),
+			User:    GetApolloString("DB_USER", "bingtian_yu_ro"),
+			Passwd:  GetApolloString("DB_PASS", "Bingtian_yu_ro"),
+			Charset: "utf8",
+			OpenMax: GetApolloInt("MYSQL_MAX_OPEN_CONN", 200),
 			IdleMax: GetApolloInt("MYSQL_MAX_IDEL_CONN", 60),
 		},
 	}

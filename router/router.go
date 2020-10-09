@@ -65,31 +65,8 @@ func InitRouter() *gin.Engine {
 	}
 	//工具库router
 	toolRouter(router)
-	ginUsersRouter(router)
-	ginContentsRouter(router)
+	wrUsersRouter(router)
 	return router
-}
-
-func ginUsersRouter(router *gin.Engine) {
-	ginUsers := GinUsersController{}
-	ginUsersR := router.Group("users")
-	{
-		ginUsersR.GET("/", ginUsers.Find)
-		ginUsersR.POST("/", ginUsers.Create)
-		ginUsersR.GET("/:id", ginUsers.FindById)
-		ginUsersR.POST("/update-by-id", ginUsers.UpdateById)
-	}
-}
-
-func ginContentsRouter(router *gin.Engine) {
-	ginContents := GinContentsController{}
-	ginContentsR := router.Group("contents")
-	{
-		ginContentsR.GET("/", ginContents.Find)
-		ginContentsR.POST("/", ginContents.Create)
-		ginContentsR.GET("/:id", ginContents.FindById)
-		ginContentsR.PUT("/update-by-id", ginContents.UpdateById)
-	}
 }
 
 func toolRouter(router *gin.Engine) {

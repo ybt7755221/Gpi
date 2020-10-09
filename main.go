@@ -36,6 +36,6 @@ func main() {
 	if err := serv.ListenAndServe(); err != nil {
 		elog.New(err.Error(), elog.GetFileInfo(1))
 	}else {
-		fmt.Println("The Server Listen Port is 8080")
+		fmt.Printf("The Server Listen Port is %s", conf.HttpPort)
 	}
 }

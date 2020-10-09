@@ -2,13 +2,15 @@ package models
 
 import (
 	"encoding/json"
-	"github.com/gin-gonic/gin"
 	"gpi/config"
 	. "gpi/entities"
+
+	"github.com/gin-gonic/gin"
 )
 
 const (
 	Gin = config.Gin
+	Ali = config.Ali
 )
 
 func getPagingParams(pagination *Pagination) gin.H {
